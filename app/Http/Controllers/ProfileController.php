@@ -16,8 +16,43 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $user = $request->user();
+        $stats = [];
+
+        switch ($user->role) {
+            case 'client':
+                $stats = [
+                    'Favoris' => $user->favorites()->count(),
+                    'Demandes de visite' => $user->visitRequests()->count(),
+                    'Agent assigné' => $user->assignedAgent ? $user->assignedAgent->name : 'Aucun agent',
+                ];
+                break;
+            case 'bailleur':
+                $stats = [
+                    'Annonces publiées' => $user->properties()->where('status', 'publiee')->count(),
+                    'Vues totales' => $user->properties()->sum('views_count'),
+                    'Demandes de visite' => \App\Models\VisitRequest::whereIn('property_id', $user->properties()->pluck('id'))->count(),
+                ];
+                break;
+            case 'agent':
+                $stats = [
+                    'Validations en attente' => \App\Models\Property::where('status', 'en_attente')->count(),
+                    'Visites assignées' => \App\Models\VisitRequest::where('agent_id', $user->id)->count(),
+                    'Clients suivis' => $user->agentAffectations()->count(),
+                ];
+                break;
+            case 'manager':
+                $stats = [
+                    'Utilisateurs actifs' => \App\Models\User::where('is_active', true)->count(),
+                    'Clients' => \App\Models\User::where('role', 'client')->count(),
+                    'Agents' => \App\Models\User::where('role', 'agent')->count(),
+                ];
+                break;
+        }
+
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
+            'stats' => $stats,
         ]);
     }
 

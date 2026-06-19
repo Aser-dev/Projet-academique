@@ -1,11 +1,11 @@
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
+            {{ __('Informations du profil') }}
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
+            {{ __("Mettez à jour les informations de votre compte, votre email et vos coordonnées.") }}
         </p>
     </header>
 
@@ -18,9 +18,26 @@
         @method('patch')
 
         <div>
-            <x-input-label for="name" :value="__('Name')" />
+            <x-input-label for="name" :value="__('Nom')" />
             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
             <x-input-error class="mt-2" :messages="$errors->get('name')" />
+        </div>
+
+        <div>
+            <x-input-label for="role" :value="__('Rôle')" />
+            <x-text-input id="role" name="role" type="text" class="mt-1 block w-full bg-gray-100" :value="old('role', $user->role)" disabled />
+        </div>
+
+        <div>
+            <x-input-label for="phone" :value="__('Téléphone')" />
+            <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone)" autocomplete="tel" />
+            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+        </div>
+
+        <div>
+            <x-input-label for="address" :value="__('Adresse')" />
+            <x-text-input id="address" name="address" type="text" class="mt-1 block w-full" :value="old('address', $user->address)" autocomplete="street-address" />
+            <x-input-error class="mt-2" :messages="$errors->get('address')" />
         </div>
 
         <div>
@@ -37,13 +54,13 @@
                             {{ __('Click here to re-send the verification email.') }}
                         </button>
                     </p>
-
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
-                    @endif
                 </div>
+
+                @if (session('status') === 'verification-link-sent')
+                    <p class="mt-2 font-medium text-sm text-green-600">
+                        {{ __('A new verification link has been sent to your email address.') }}
+                    </p>
+                @endif
             @endif
         </div>
 

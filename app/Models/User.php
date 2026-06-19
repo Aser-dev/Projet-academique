@@ -61,6 +61,11 @@ class User extends Authenticatable
         return $this->hasMany(ClientAgent::class, 'agent_id');
     }
 
+    public function assignedAgent()
+    {
+        return $this->belongsTo(User::class, 'assigned_agent_id');
+    }
+
     public function notifications()
     {
         return $this->hasMany(Notification::class);
