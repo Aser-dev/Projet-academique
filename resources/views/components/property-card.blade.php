@@ -2,7 +2,7 @@
     <!-- Image Container -->
     <div class="relative overflow-hidden h-64 bg-gray-200">
         @if ($property->photos && $property->photos->first())
-            <img src="{{ asset('storage/' . $property->photos->first()->photo_url) }}" 
+            <img src="{{ $property->photos->first()->url }}" 
                  alt="{{ $property->title }}" 
                  class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
         @else

@@ -223,7 +223,13 @@
 @endif
 
 <!-- MAIN -->
-<main>{{ $slot }}</main>
+<main>
+    @isset($slot)
+        {{ $slot }}
+    @endisset
+
+    @yield('content')
+</main>
 
 <!-- ╔══════════════════════════════════════════╗
      ║                FOOTER                    ║

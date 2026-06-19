@@ -11,6 +11,9 @@ use App\Models\VisitRequest;
 use App\Models\ClientAgent;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -257,6 +260,8 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
+        $this->ensureDefaultPropertyImage();
+
         $createdProperties = [];
         foreach ($properties as $data) {
             $usages = $data['usages'];
@@ -273,6 +278,11 @@ class DatabaseSeeder extends Seeder
             // Photos
             $photos = $photosByType[$property->type] ?? ['properties/default.jpg'];
             foreach ($photos as $i => $path) {
+                if (str_starts_with($path, 'http')) {
+                    $downloadedPath = $this->downloadRemoteImage($path, "properties/{$property->id}");
+                    $path = $downloadedPath ?? 'properties/default.jpg';
+                }
+
                 PropertyPhoto::create([
                     'property_id'   => $property->id,
                     'path'          => $path,
@@ -283,6 +293,8 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+
+        $this->downloadRemainingSiteImages();
 
         // ── Propriétés en attente de validation ───────────────────────
         $pending = Property::create([
@@ -364,5 +376,52 @@ class DatabaseSeeder extends Seeder
         $this->command->info('  bailleur2@immo.com / password  (Bailleur)');
         $this->command->info('  client@immo.com    / password  (Client)');
         $this->command->info('  client2@immo.com   / password  (Client)');
+    }
+
+    protected function downloadRemoteImage(string $url, string $directory): ?string
+    {
+        try {
+            $response = Http::withoutVerifying()->timeout(30)->get($url);
+            if (! $response->successful()) {
+                $this->command->warn("Impossible de télécharger l'image : {$url}");
+                return null;
+            }
+
+            $pathInfo = pathinfo(parse_url($url, PHP_URL_PATH) ?: '');
+            $filename = Str::slug($pathInfo['filename'] ?? 'image', '-');
+            $extension = $pathInfo['extension'] ?? 'jpg';
+            $extension = preg_match('/^[a-z0-9]+$/i', $extension) ? $extension : 'jpg';
+            $filename = $filename ?: 'image';
+            $filename = $filename . '-' . substr(md5($url), 0, 10) . '.' . $extension;
+
+            $path = trim($directory, '/') . '/' . $filename;
+            Storage::disk('public')->put($path, $response->body());
+
+            return $path;
+        } catch (\Throwable $exception) {
+            $this->command->warn("Erreur lors du téléchargement de l'image {$url} : {$exception->getMessage()}");
+            return null;
+        }
+    }
+
+    protected function ensureDefaultPropertyImage(): void
+    {
+        $defaultPath = 'properties/default.jpg';
+
+        if (Storage::disk('public')->exists($defaultPath)) {
+            return;
+        }
+
+        $jpeg = base64_decode(
+            '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////2wBDAf//////////////////////////////////////////////////////////////////////////////////////wAARCAABAAEDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAUGB//EABQBAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhADEAAAAJwP/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPwA//8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAgEBPwA//8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAwEBPwA//9k='
+        );
+
+        Storage::disk('public')->put($defaultPath, $jpeg);
+    }
+
+    protected function downloadRemainingSiteImages(): void
+    {
+        // Aucun téléchargement supplémentaire nécessaire pour le moment.
+        // Cette méthode garde la logique prête pour d'autres images distantes.
     }
 }

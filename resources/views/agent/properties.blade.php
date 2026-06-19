@@ -25,7 +25,7 @@
                 <div class="card bg-white shadow-sm rounded-2xl overflow-hidden border border-gray-100">
                     <div class="h-44 bg-gray-100 flex items-center justify-center">
                         @if ($property->photos && $property->photos->first())
-                            <img src="{{ asset('storage/' . $property->photos->first()->photo_url) }}" alt="{{ $property->title }}" class="w-full h-full object-cover">
+                            <img src="{{ $property->photos->first()?->url ?? asset('images/no-image.png') }}" alt="{{ $property->title }}" class="w-full h-full object-cover">
                         @else
                             <div class="text-gray-400">
                                 <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">

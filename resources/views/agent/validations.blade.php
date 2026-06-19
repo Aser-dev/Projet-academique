@@ -19,7 +19,7 @@
                     <!-- Property Image -->
                     <div>
                         @if ($property->photos && $property->photos->first())
-                            <img src="{{ asset('storage/' . $property->photos->first()->photo_url) }}" 
+                            <img src="{{ $property->photos->first()?->url ?? asset('images/no-image.png') }}" 
                                  alt="{{ $property->title }}" 
                                  class="w-full h-48 object-cover rounded-lg">
                         @else

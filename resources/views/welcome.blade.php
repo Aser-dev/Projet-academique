@@ -117,7 +117,7 @@
                 @forelse($latestProperties as $property)
                     <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition">
                         @if ($property->photos && $property->photos->first())
-                            <img src="{{ asset('storage/' . $property->photos->first()->photo_url) }}" 
+                            <img src="{{ $property->photos->first()->url }}" 
                                  alt="{{ $property->title }}" 
                                  class="w-full h-48 object-cover">
                         @endif

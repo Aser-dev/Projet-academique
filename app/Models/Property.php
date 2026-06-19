@@ -66,7 +66,7 @@ class Property extends Model
     public function getPhotoUrlAttribute()
     {
         $photo = $this->photos()->first();
-        return $photo ? $photo->photo_url : null;
+        return $photo ? $photo->url : null;
     }
 
     // Methods
