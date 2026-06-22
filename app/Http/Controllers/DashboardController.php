@@ -26,10 +26,13 @@ class DashboardController extends Controller
     public function agent(): View
     {
         $pendingValidations = Property::where('status', 'en_attente')->count();
-        $pendingVisits = VisitRequest::whereNull('agent_id')
-                            ->orWhere('agent_id', Auth::id())
-                            ->where('status', 'en_attente')
-                            ->count();
+        $agentId = Auth::id();
+        $pendingVisits = VisitRequest::where('status', 'en_attente')
+            ->where(function ($q) use ($agentId) {
+                $q->where('agent_id', $agentId)
+                    ->orWhereNull('agent_id');
+            })
+            ->count();
         return view('dashboard.agent', compact('pendingValidations', 'pendingVisits'));
     }
 

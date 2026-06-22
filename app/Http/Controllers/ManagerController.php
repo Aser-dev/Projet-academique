@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClientAgent;
 use App\Models\User;
 use App\Models\Property;
 use App\Models\VisitRequest;
@@ -125,13 +126,31 @@ class ManagerController extends Controller
     // EF-D5: Supprimer utilisateur
     public function deleteUser(User $user)
     {
+        if ($user->id === Auth::id()) {
+            return back()->with('error', 'Vous ne pouvez pas supprimer votre propre compte.');
+        }
+
+        if ($user->role === 'manager') {
+            return back()->with('error', 'Impossible de supprimer un manager.');
+        }
+
         $user->delete();
+
         return redirect()->route('manager.users')->with('success', 'Utilisateur supprimé');
     }
 
     public function toggleActive(User $user)
     {
-        $user->update(['is_active' => !$user->is_active]);
+        if ($user->id === Auth::id()) {
+            return back()->with('error', 'Vous ne pouvez pas suspendre votre propre compte.');
+        }
+
+        if ($user->role === 'manager') {
+            return back()->with('error', 'Impossible de suspendre un manager.');
+        }
+
+        $user->update(['is_active' => ! $user->is_active]);
+
         return back()->with('success', 'Statut modifié.');
     }
 
@@ -146,6 +165,14 @@ class ManagerController extends Controller
         $client = User::findOrFail($request->client_id);
         $client->update(['assigned_agent_id' => $request->agent_id]);
 
+        ClientAgent::updateOrCreate(
+            ['client_id' => $client->id],
+            [
+                'agent_id'    => $request->agent_id,
+                'assigned_by' => Auth::id(),
+            ]
+        );
+
         return back()->with('success', 'Client affecté à l\'agent.');
     }
 
@@ -156,8 +183,4 @@ class ManagerController extends Controller
         return back()->with('success', 'Annonce retirée.');
     }
 
-    public function createAgent(Request $request)
-    {
-        // À implémenter selon votre formulaire
-    }
 }

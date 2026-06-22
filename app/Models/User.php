@@ -23,7 +23,7 @@ class User extends Authenticatable
     ];
 
     // Rôles disponibles
-    const ROLES = ['visiteur', 'client', 'bailleur', 'agent', 'manager'];
+    const ROLES = ['client', 'bailleur', 'agent', 'manager'];
 
     // Relations
     public function properties()
@@ -72,8 +72,8 @@ class User extends Authenticatable
     }
 
     // Vérification du rôle
-public function hasRole(string $role): bool
-{
-    return $this->role === $role;
-}
+    public function hasRole(string $role): bool
+    {
+        return $this->role === $role;
+    }
 }

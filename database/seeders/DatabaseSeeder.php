@@ -316,8 +316,16 @@ class DatabaseSeeder extends Seeder
         PropertyUsage::create(['property_id' => $pending->id, 'usage' => 'residence']);
 
         // ── Affectation clients → agents ──────────────────────────────
-        ClientAgent::create(['client_id' => $client1->id, 'agent_id' => $agent1->id, 'assigned_by' => $manager->id]);
-        ClientAgent::create(['client_id' => $client2->id, 'agent_id' => $agent2->id, 'assigned_by' => $manager->id]);
+        ClientAgent::updateOrCreate(
+            ['client_id' => $client1->id],
+            ['agent_id' => $agent1->id, 'assigned_by' => $manager->id]
+        );
+        ClientAgent::updateOrCreate(
+            ['client_id' => $client2->id],
+            ['agent_id' => $agent2->id, 'assigned_by' => $manager->id]
+        );
+        $client1->update(['assigned_agent_id' => $agent1->id]);
+        $client2->update(['assigned_agent_id' => $agent2->id]);
 
         // ── Favoris ───────────────────────────────────────────────────
         Favorite::create(['user_id' => $client1->id, 'property_id' => $createdProperties[0]->id]);

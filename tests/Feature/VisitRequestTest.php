@@ -20,7 +20,7 @@ class VisitRequestTest extends TestCase
         $client = User::factory()->create(['role' => 'client']);
         $property = Property::factory()->create(['status' => 'publiee']);
         
-        $response = $this->actingAs($client)
+        $this->actingAs($client)
             ->post("/visit/{$property->id}", [
                 'visit_date' => now()->addDays(5)->format('Y-m-d'),
                 'visit_time' => '10:00',
@@ -31,6 +31,44 @@ class VisitRequestTest extends TestCase
             'property_id' => $property->id,
             'status'      => 'en_attente',
         ]);
+    }
+
+    public function test_visit_request_assigns_client_agent_when_available()
+    {
+        $agent = User::factory()->create(['role' => 'agent']);
+        $client = User::factory()->create([
+            'role' => 'client',
+            'assigned_agent_id' => $agent->id,
+        ]);
+        $property = Property::factory()->create(['status' => 'publiee']);
+
+        $this->actingAs($client)
+            ->post("/visit/{$property->id}", [
+                'visit_date' => now()->addDays(5)->format('Y-m-d'),
+                'visit_time' => '10:00',
+            ]);
+
+        $this->assertDatabaseHas('visit_requests', [
+            'client_id' => $client->id,
+            'agent_id'  => $agent->id,
+        ]);
+    }
+
+    public function test_client_can_view_visits_history()
+    {
+        $client = User::factory()->create(['role' => 'client']);
+        $property = Property::factory()->create(['status' => 'publiee']);
+
+        VisitRequest::factory()->create([
+            'client_id' => $client->id,
+            'property_id' => $property->id,
+            'status' => 'en_attente',
+        ]);
+
+        $response = $this->actingAs($client)->get('/client/visits-history');
+
+        $response->assertOk();
+        $response->assertSee($property->title);
     }
 
     /**
@@ -55,5 +93,24 @@ class VisitRequestTest extends TestCase
             'id' => $visit->id,
             'status' => 'validee',
         ]);
+    }
+
+    public function test_agent_cannot_update_visit_assigned_to_another_agent()
+    {
+        $agent1 = User::factory()->create(['role' => 'agent']);
+        $agent2 = User::factory()->create(['role' => 'agent']);
+        $client = User::factory()->create(['role' => 'client']);
+        $property = Property::factory()->create();
+
+        $visit = VisitRequest::factory()->create([
+            'client_id' => $client->id,
+            'property_id' => $property->id,
+            'agent_id' => $agent1->id,
+            'status' => 'en_attente',
+        ]);
+
+        $this->actingAs($agent2)
+            ->post("/agent/visits/{$visit->id}/status", ['status' => 'validee'])
+            ->assertForbidden();
     }
 }

@@ -21,10 +21,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'role:client'])->group(function () {
     Route::get('/client/dashboard', [DashboardController::class, 'client'])->name('client.dashboard');
-    Route::get('/client/visits-history', function () {
-        $visits = \App\Models\VisitRequest::where('user_id', auth()->user()->id)->latest()->paginate(10);
-        return view('client.visits-history', compact('visits'));
-    })->name('client.visits-history');
+    Route::get('/client/visits-history', [VisitRequestController::class, 'clientHistory'])->name('client.visits-history');
     Route::post('/favorite/{property}', [FavoriteController::class, 'toggle'])->name('favorite.toggle');
     Route::get('/favorites', [FavoriteController::class, 'index'])->name('client.favorites');
     Route::post('/visit/{property}', [VisitRequestController::class, 'store'])->name('visit.request');
@@ -70,7 +67,5 @@ Route::middleware(['auth', 'role:manager'])->prefix('manager')->group(function (
     
     // Property Management - EF-D8
     Route::post('/properties/{property}/withdraw', [ManagerController::class, 'withdrawProperty'])->name('manager.properties.withdraw');
-    
-Route::post('/create-agent', [ManagerController::class, 'createAgent'])->name('manager.create.agent');
 });
 

@@ -40,14 +40,32 @@ class PropertyController extends Controller
     // Fiche détaillée
     public function show(Property $property)
     {
-        $property->increment('views_count');
+        $user = Auth::user();
+
+        if ($property->status !== 'publiee') {
+            $canView = $user && (
+                $property->user_id === $user->id
+                || in_array($user->role, ['agent', 'manager'], true)
+            );
+
+            if (! $canView) {
+                abort(404);
+            }
+        } else {
+            $property->increment('views_count');
+        }
+
         return view('properties.show', compact('property'));
     }
 
     // Mes annonces (bailleur)
     public function myProperties()
     {
-        $properties = Property::where('user_id', Auth::id())->latest()->get();
+        $properties = Property::with(['photos', 'usages'])
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->get();
+
         return view('bailleur.index', compact('properties'));
     }
 

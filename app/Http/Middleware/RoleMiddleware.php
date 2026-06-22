@@ -8,18 +8,16 @@ use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  string  $role
-     * @return mixed
-     */
     public function handle(Request $request, Closure $next, string $role): mixed
     {
-        if (!Auth::check() || Auth::user()->role !== $role) {
+        $user = Auth::user();
+
+        if (! $user || $user->role !== $role) {
             abort(403, 'Accès non autorisé');
+        }
+
+        if ($user->is_active === false) {
+            abort(403, 'Compte suspendu');
         }
 
         return $next($request);

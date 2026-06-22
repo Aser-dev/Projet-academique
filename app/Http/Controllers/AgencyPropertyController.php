@@ -31,7 +31,7 @@ class AgencyPropertyController extends Controller
             'title'        => 'required|string|max:200',
             'description'  => 'required|string',
             'price'        => 'required|numeric|min:0',
-'superficie'   => 'required|numeric|min:0',
+            'superficie'   => 'required|numeric|min:0',
 
             // Le formulaire envoie `localisation`
             // mais la colonne DB s'appelle `location`
@@ -49,12 +49,13 @@ class AgencyPropertyController extends Controller
 
         $data['user_id']   = Auth::id();
         $data['is_agency'] = true;
-$data['status']    = 'publiee';
+        $data['status']    = 'publiee';
 
-        // La colonne DB s'appelle `location`.
-        // Le formulaire envoie `localisation`.
         $data['location'] = $data['localisation'] ?? null;
         unset($data['localisation']);
+
+        $data['option'] = $data['option_type'];
+        unset($data['option_type']);
 
         $property = Property::create($data);
 

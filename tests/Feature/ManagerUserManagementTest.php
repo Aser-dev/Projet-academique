@@ -51,6 +51,12 @@ class ManagerUserManagementTest extends TestCase
             'id' => $client->id,
             'assigned_agent_id' => $agent->id,
         ]);
+
+        $this->assertDatabaseHas('client_agent', [
+            'client_id' => $client->id,
+            'agent_id' => $agent->id,
+            'assigned_by' => $manager->id,
+        ]);
     }
 
     /**
