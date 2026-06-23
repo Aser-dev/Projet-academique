@@ -18,6 +18,7 @@ class Property extends Model
         'furnished' => 'boolean',
         'is_agency' => 'boolean',
         'views_count' => 'integer',
+        'rooms' => 'integer',
     ];
 
     // Relations

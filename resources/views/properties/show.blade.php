@@ -44,7 +44,7 @@
                             @auth
                             @if(auth()->user()->role === 'client')
                             <button type="button"
-                                    data-favorite-property="{{ $property->id }}"
+                                    data-favorite-property-id="{{ $property->id }}"
                                     data-favorite-url="{{ route('favorite.toggle', $property) }}"
                                     data-favorited="{{ $isFavorited ? 'true' : 'false' }}"
                                     onclick="togglePropertyFavorite(event, this)"
@@ -272,7 +272,7 @@ function favoriteHeartIcon(favorited) {
 }
 
 function applyFavoriteState(propertyId, favorited) {
-    document.querySelectorAll(`[data-favorite-property="${propertyId}"]`).forEach((button) => {
+    document.querySelectorAll(`[data-favorite-property-id="${propertyId}"]`).forEach((button) => {
         button.dataset.favorited = favorited ? 'true' : 'false';
         button.setAttribute('aria-pressed', favorited ? 'true' : 'false');
         button.setAttribute('aria-label', favorited ? 'Retirer des favoris' : 'Ajouter aux favoris');
@@ -300,7 +300,14 @@ function togglePropertyFavorite(event, button) {
         if (!response.ok) throw new Error('favorite-toggle-failed');
         return response.json();
     })
-    .then((data) => applyFavoriteState(button.dataset.favoriteProperty, data.favorited))
+    .then((data) => {
+        applyFavoriteState(button.dataset.favoritePropertyId, data.favorited);
+        if (data.favorited) {
+            button.dataset.favorited = 'true';
+        } else {
+            button.dataset.favorited = 'false';
+        }
+    })
     .finally(() => {
         button.disabled = false;
     });

@@ -76,4 +76,41 @@ class User extends Authenticatable
     {
         return $this->role === $role;
     }
+
+    public function getInitialsAttribute(): string
+    {
+        $parts = preg_split('/\s+/', trim($this->name)) ?: [];
+        $initials = collect($parts)->take(2)->map(fn ($part) => mb_strtoupper(mb_substr($part, 0, 1)))->implode('');
+
+        return $initials ?: '?';
+    }
+
+    public function getRoleLabelAttribute(): string
+    {
+        return match ($this->role) {
+            'manager' => 'Manager',
+            'agent' => 'Agent immobilier',
+            'bailleur' => 'Bailleur partenaire',
+            default => ucfirst($this->role ?? ''),
+        };
+    }
+
+    public function getExpertStatAttribute(): array
+    {
+        return match ($this->role) {
+            'manager' => [
+                'label' => 'Experts encadrés',
+                'value' => static::where('is_active', true)->whereIn('role', ['agent', 'bailleur'])->count(),
+            ],
+            'agent' => [
+                'label' => 'Biens validés',
+                'value' => (int) ($this->validated_properties_count ?? $this->validatedProperties()->count()),
+            ],
+            'bailleur' => [
+                'label' => 'Annonces actives',
+                'value' => (int) ($this->published_properties_count ?? $this->properties()->where('status', 'publiee')->count()),
+            ],
+            default => ['label' => 'Activité', 'value' => 0],
+        };
+    }
 }

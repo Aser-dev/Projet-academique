@@ -211,12 +211,15 @@
 
                 <!-- Actions image -->
                 <div class="absolute top-3 right-3 flex items-center gap-2">
-                    @auth
-                    @if(auth()->user()->role === 'client')
+@php
+$canFavorite = auth()->check() && auth()->user()->role === 'client';
+                @endphp
+                @if($canFavorite)
                     <button type="button"
-                            data-favorite-property="{{ $property->id }}"
+data-favorite-property="{{ $property->id }}"
                             data-favorite-url="{{ route('favorite.toggle', $property) }}"
                             data-favorited="{{ $isFavorited ? 'true' : 'false' }}"
+                            data-favorite-property-id="{{ $property->id }}"
                             onclick="togglePropertyFavorite(event, this)"
                             aria-label="{{ $isFavorited ? 'Retirer des favoris' : 'Ajouter aux favoris' }}"
                             aria-pressed="{{ $isFavorited ? 'true' : 'false' }}"
@@ -226,7 +229,6 @@
                         </svg>
                     </button>
                     @endif
-                    @endauth
                     <span class="flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-medium text-white"
                           style="background:rgba(0,0,0,0.35); backdrop-filter:blur(4px)">
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
@@ -313,7 +315,120 @@
 </section>
 
 <!-- ══════════════════════════════════════
-     SECTION CTA
+     PLATFORM EXPERTS (Experts locaux)
+══════════════════════════════════════ -->
+@if(isset($platformExperts) && $platformExperts->flatten()->isNotEmpty() && !request()->hasAny(['search','type','option']))
+<section class="bg-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid items-end gap-8 border-b border-slate-200 pb-10 lg:grid-cols-[1fr_auto]">
+            <div class="max-w-3xl">
+                <span class="text-xs font-extrabold uppercase tracking-widest text-blue-700">Experts locaux</span>
+                <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-slate-950 md:text-5xl">
+                    Des conseillers immobiliers prêts à vous guider
+                </h2>
+                <p class="mt-4 max-w-2xl text-base leading-7 text-slate-600">
+                    Une sélection de managers, agents et bailleurs partenaires pour vérifier les annonces, organiser les visites et simplifier vos décisions.
+                </p>
+            </div>
+
+            <div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                <div class="flex -space-x-3">
+                    @php
+                        $allExperts = $platformExperts->flatten();
+                        $featuredExperts = $allExperts->take(3)->values();
+                    @endphp
+
+                    @foreach($featuredExperts as $expert)
+                        @php
+                            $fallbackPhotos = [
+                                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=160&q=80',
+                                'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&q=80',
+                                'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=160&q=80',
+                            ];
+                            $expertPhoto = $expert->avatar
+                                ? asset('storage/'.$expert->avatar)
+                                : ($fallbackPhotos[$loop->index] ?? $fallbackPhotos[0]);
+                        @endphp
+                        <img src="{{ $expertPhoto }}" alt="{{ $expert->name }}" class="h-12 w-12 rounded-full border-2 border-white object-cover shadow-sm">
+                    @endforeach
+                </div>
+                <p class="mt-3 text-sm font-bold text-slate-900">{{ $allExperts->count() }} experts disponibles</p>
+                <p class="text-xs text-slate-500">Profils vérifiés par ImmoSN</p>
+            </div>
+        </div>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+            @if($platformExperts->has('manager'))
+                <span class="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-4 py-2 text-sm font-bold text-indigo-700">
+                    <span class="h-2 w-2 rounded-full bg-indigo-500"></span>
+                    {{ $platformExperts['manager']->count() }} Managers
+                </span>
+            @endif
+            @if($platformExperts->has('agent'))
+                <span class="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-bold text-blue-700">
+                    <span class="h-2 w-2 rounded-full bg-blue-500"></span>
+                    {{ $platformExperts['agent']->count() }} Agents
+                </span>
+            @endif
+            @if($platformExperts->has('bailleur'))
+                <span class="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-4 py-2 text-sm font-bold text-emerald-700">
+                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                    {{ $platformExperts['bailleur']->count() }} Bailleurs
+                </span>
+            @endif
+        </div>
+
+        @php
+            $roleSections = [
+                'manager' => ['title' => 'Direction & supervision', 'subtitle' => 'Coordination de la plateforme et qualité des annonces'],
+                'agent' => ['title' => 'Agents immobiliers', 'subtitle' => 'Validation, visites et accompagnement personnalisé'],
+                'bailleur' => ['title' => 'Bailleurs partenaires', 'subtitle' => 'Propriétaires actifs avec des biens vérifiés'],
+            ];
+        @endphp
+
+        <div class="mt-12 space-y-14">
+            @foreach($roleSections as $roleKey => $section)
+                @if($platformExperts->has($roleKey) && $platformExperts[$roleKey]->isNotEmpty())
+                    <div>
+                        <div class="mb-6 flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
+                            <div>
+                                <h3 class="text-xl font-extrabold text-slate-950">{{ $section['title'] }}</h3>
+                                <p class="mt-1 text-sm text-slate-500">{{ $section['subtitle'] }}</p>
+                            </div>
+                            <span class="text-sm font-bold text-slate-400">{{ $platformExperts[$roleKey]->count() }} profil(s)</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                            @foreach($platformExperts[$roleKey] as $expert)
+                                @include('components.expert-card', ['expert' => $expert])
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+            @endforeach
+        </div>
+
+        <div class="mt-16 border-t border-slate-200 pt-10">
+            <div class="grid grid-cols-1 gap-4 text-center md:grid-cols-3">
+                @foreach([
+                    ['100%', 'Annonces vérifiées', 'Chaque bien est contrôlé par nos agents'],
+                    ['Sous 24h', 'Réponse rapide', 'Prise en charge de vos demandes de visite'],
+                    ['De A à Z', 'Accompagnement', 'De la recherche à la signature'],
+                ] as [$value, $label, $desc])
+                    <div class="rounded-lg border border-slate-200 bg-slate-50 p-6">
+                        <p class="mb-1 text-2xl font-extrabold text-slate-950">{{ $value }}</p>
+                        <p class="mb-1 text-sm font-bold text-blue-700">{{ $label }}</p>
+                        <p class="text-xs text-slate-500">{{ $desc }}</p>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</section>
+@endif
+
+<!-- ══════════════════════════════════════
+     PLATFORM EXPERTS (Experts locaux)
 ══════════════════════════════════════ -->
 @guest
 <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
@@ -359,17 +474,27 @@ function favoriteHeartIcon(favorited) {
 }
 
 function applyFavoriteState(propertyId, favorited) {
-    document.querySelectorAll(`[data-favorite-property="${propertyId}"]`).forEach((button) => {
-        button.dataset.favorited = favorited ? 'true' : 'false';
-        button.setAttribute('aria-pressed', favorited ? 'true' : 'false');
-        button.setAttribute('aria-label', favorited ? 'Retirer des favoris' : 'Ajouter aux favoris');
-        button.innerHTML = favoriteHeartIcon(favorited);
+    // Synchronise globalement tous les coeurs de ce propertyId
+    document.querySelectorAll(`[data-favorite-property-id="${propertyId}"]`).forEach((btn) => {
+        btn.dataset.favorited = favorited ? 'true' : 'false';
+        btn.setAttribute('aria-pressed', favorited ? 'true' : 'false');
+        btn.setAttribute('aria-label', favorited ? 'Retirer des favoris' : 'Ajouter aux favoris');
+        btn.innerHTML = favoriteHeartIcon(favorited);
     });
+}
+
+function syncButton(button, favorited) {
+    // Synchronise immédiatement le bouton cliqué
+    button.dataset.favorited = favorited ? 'true' : 'false';
+    button.setAttribute('aria-pressed', favorited ? 'true' : 'false');
+    button.setAttribute('aria-label', favorited ? 'Retirer des favoris' : 'Ajouter aux favoris');
+    button.innerHTML = favoriteHeartIcon(favorited);
 }
 
 function togglePropertyFavorite(event, button) {
     event.preventDefault();
     event.stopPropagation();
+    event.stopImmediatePropagation();
 
     if (button.disabled) return;
 
@@ -387,7 +512,14 @@ function togglePropertyFavorite(event, button) {
         if (!response.ok) throw new Error('favorite-toggle-failed');
         return response.json();
     })
-    .then((data) => applyFavoriteState(button.dataset.favoriteProperty, data.favorited))
+    .then((data) => {
+        const propertyId = button.dataset.favoritePropertyId ?? button.dataset.favoriteProperty;
+        // Sync immédiat sur le bouton cliqué
+        syncButton(button, data.favorited);
+        // Sync global (tous les coeurs du même bien)
+        applyFavoriteState(propertyId, data.favorited);
+        button.dataset.favorited = data.favorited ? 'true' : 'false';
+    })
     .finally(() => {
         button.disabled = false;
     });

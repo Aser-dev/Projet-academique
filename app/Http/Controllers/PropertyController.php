@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Property;
 use App\Models\PropertyPhoto;
 use App\Models\PropertyUsage;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -34,7 +35,37 @@ class PropertyController extends Controller
         if ($request->filled('beds'))  $query->where('rooms', '>=', $request->beds);
 
         $properties = $query->latest()->paginate(12);
-        return view('properties.index', compact('properties'));
+        $latestProperties = Property::where('status', 'publiee')
+            ->with('photos')
+            ->latest()
+            ->limit(3)
+            ->get();
+
+        $platformExperts = User::query()
+            ->where('is_active', true)
+            ->whereIn('role', ['manager', 'agent', 'bailleur'])
+            ->withCount([
+                'properties as published_properties_count' => fn ($q) => $q->where('status', 'publiee'),
+                'validatedProperties as validated_properties_count',
+            ])
+            ->orderBy('name')
+            ->get()
+            ->sortBy(fn ($expert) => match ($expert->role) {
+                'manager' => 0,
+                'agent' => 1,
+                'bailleur' => 2,
+                default => 3,
+            })
+            ->groupBy('role')
+            ->map(function ($experts, $role) {
+                return $experts->sortByDesc(fn ($expert) => match ($role) {
+                    'agent' => $expert->validated_properties_count,
+                    'bailleur' => $expert->published_properties_count,
+                    default => $expert->id,
+                })->values();
+            });
+
+        return view('properties.index', compact('properties', 'latestProperties', 'platformExperts'));
     }
 
     // Fiche détaillée
