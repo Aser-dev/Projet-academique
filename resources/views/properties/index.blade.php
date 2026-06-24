@@ -6,7 +6,7 @@
 <!-- ══════════════════════════════════════
      HERO SECTION
 ══════════════════════════════════════ -->
-<section class="relative" style="height:580px; min-height:480px;">
+<section class="relative h-[520px] md:h-[580px] min-h-[420px] md:min-h-[480px]">
     <!-- Image de fond -->
     <div class="absolute inset-0 overflow-hidden">
         <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=85"
@@ -182,7 +182,7 @@
                  style="box-shadow:0 1px 6px rgba(0,0,0,0.07)">
 
             <!-- Image -->
-            <div class="relative overflow-hidden" style="height:200px; background:#e2e8f0">
+            <div class="relative overflow-hidden h-[160px] sm:h-[190px] md:h-[200px]" style="background:#e2e8f0">
                 <a href="{{ route('property.show', $property) }}" class="block w-full h-full">
                 @if($property->photos->first())
                 <img src="{{ $property->photos->first()->url }}"
@@ -216,7 +216,7 @@ $canFavorite = auth()->check() && auth()->user()->role === 'client';
                 @endphp
                 @if($canFavorite)
                     <button type="button"
-data-favorite-property="{{ $property->id }}"
+                            data-favorite-property="{{ $property->id }}"
                             data-favorite-url="{{ route('favorite.toggle', $property) }}"
                             data-favorited="{{ $isFavorited ? 'true' : 'false' }}"
                             data-favorite-property-id="{{ $property->id }}"

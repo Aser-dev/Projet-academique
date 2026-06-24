@@ -24,8 +24,8 @@
         <div class="lg:col-span-2 space-y-6">
 
             {{-- Galerie photos --}}
-            <div class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100" x-data="{ main: '{{ $property->photos->first() ? $property->photos->first()->url : '' }}' }">
-                <div class="relative overflow-hidden bg-gray-100" style="height:420px">
+<div class="bg-white rounded-2xl overflow-hidden shadow-sm border-gray-100" x-data="{ main: '{{ $property->photos->first() ? $property->photos->first()->url : '' }}' }">
+<div class="relative overflow-hidden bg-gray-100 h-[290px] sm:h-[340px] md:h-[390px]">
                     @if($property->photos->first())
                         <img :src="main" alt="{{ $property->title }}"
                              class="w-full h-full object-cover transition-opacity duration-300">
@@ -73,12 +73,11 @@
 
                 {{-- Thumbnails --}}
                 @if($property->photos->count() > 1)
-                <div class="flex gap-2 p-3">
+<div class="flex gap-2 p-2 sm:p-3">
                     @foreach($property->photos->take(5) as $photo)
                     <button @click="main='{{ $photo->url }}'"
-                            class="flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all hover:border-blue-500"
-                            :class="main==='{{ $photo->url }}' ? 'border-blue-500' : 'border-transparent'"
-                            style="width:80px; height:60px">
+class="flex-shrink-0 rounded-xl overflow-hidden border-2 transition-all hover:border-blue-500 w-[56px] h-[42px] sm:w-[72px] sm:h-[54px]"
+                            :class="main==='{{ $photo->url }}' ? 'border-blue-500' : 'border-transparent'">
                         <img src="{{ $photo->url }}" class="w-full h-full object-cover">
                     </button>
                     @endforeach
@@ -100,8 +99,8 @@
                         </div>
                     </div>
                     <div class="text-right flex-shrink-0">
-                        <p class="text-3xl font-extrabold text-blue-700">{{ number_format($property->price, 0, ',', ' ') }}</p>
-                        <p class="text-sm text-gray-400 font-medium">FCFA{{ $property->option === 'location' ? ' / mois' : '' }}</p>
+                        <p class="text-2xl sm:text-3xl font-extrabold text-blue-700">{{ number_format($property->price, 0, ',', ' ') }}</p>
+                        <p class="text-xs sm:text-sm text-gray-400 font-medium">FCFA{{ $property->option === 'location' ? ' / mois' : '' }}</p>
                     </div>
                 </div>
 
@@ -161,7 +160,7 @@
         <div class="space-y-5">
 
             {{-- Prix & CTA --}}
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 sticky top-24">
+<div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 lg:sticky lg:top-24">
                 <div class="mb-5 pb-5 border-b border-gray-100">
                     <p class="text-xs text-gray-400 font-medium uppercase tracking-widest mb-1">Prix</p>
                     <p class="text-3xl font-extrabold text-gray-900">{{ number_format($property->price, 0, ',', ' ') }}</p>
