@@ -11,9 +11,6 @@ use App\Models\VisitRequest;
 use App\Models\ClientAgent;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -109,6 +106,13 @@ class DatabaseSeeder extends Seeder
                 'validated_by'=> $agent1->id,
                 'views_count' => 245,
                 'usages'      => ['residence'],
+                'photos'      => ['propriete/villas/villa f3.jpg',
+                                  'propriete/villas/villa f31.webp',
+                                  'propriete/villas/f3.jpg',
+                                 
+                         
+           
+                ],
             ],
             [
                 'user_id'     => $bailleur1->id,
@@ -127,6 +131,13 @@ class DatabaseSeeder extends Seeder
                 'validated_by'=> $agent1->id,
                 'views_count' => 132,
                 'usages'      => ['residence'],
+                'photos'      => [
+                                  'propriete/immeubles/R.jpg',
+                                  'propriete/immeubles/R2.jpg',
+                                  'propriete/immeubles/R3.jpg',
+                                  'propriete/immeubles/R4.jpg',
+                                  'propriete/immeubles/R5.jpg',
+                ],
             ],
             [
                 'user_id'     => $bailleur2->id,
@@ -145,6 +156,7 @@ class DatabaseSeeder extends Seeder
                 'validated_by'=> $agent2->id,
                 'views_count' => 89,
                 'usages'      => ['residence', 'commerce'],
+                'photos'      => ['propriete/terrains/terrain.jpg'],
             ],
             [
                 'user_id'     => $bailleur2->id,
@@ -163,6 +175,9 @@ class DatabaseSeeder extends Seeder
                 'validated_by'=> $agent1->id,
                 'views_count' => 178,
                 'usages'      => ['commerce'],
+                'photos'      => ['propriete/commerces/local commercial.jpeg'
+
+                ],
             ],
             [
                 'user_id'     => $bailleur1->id,
@@ -181,6 +196,11 @@ class DatabaseSeeder extends Seeder
                 'validated_by'=> $agent2->id,
                 'views_count' => 203,
                 'usages'      => ['bureau', 'residence'],
+                'photos'      => ['propriete/bureaux/bureau.jpg',
+                                  'propriete/bureaux/bureau 1.webp',
+                                  'propriete/bureaux/bureau 2.webp',
+                                  
+                ],
             ],
             [
                 'user_id'     => $bailleur2->id,
@@ -199,6 +219,9 @@ class DatabaseSeeder extends Seeder
                 'validated_by'=> $agent1->id,
                 'views_count' => 315,
                 'usages'      => ['residence'],
+                'photos'      => ['propriete/villas/villa basse.png',
+                                  'propriete/villas/villa basse 1.png',
+                                  'propriete/villas/villa basse 2.jpg',],
             ],
             [
                 'user_id'     => $bailleur1->id,
@@ -217,6 +240,10 @@ class DatabaseSeeder extends Seeder
                 'validated_by'=> $agent2->id,
                 'views_count' => 421,
                 'usages'      => ['residence', 'commerce'],
+                'photos'      => ['propriete/appartements/WhatsAppAppart1.jpeg',
+                                  'propriete/appartements/WhatsAppAppart2.jpeg',
+                                  'propriete/appartements/WhatsAppAppart3.jpeg',
+                                  ],
             ],
             [
                 'user_id'     => $bailleur2->id,
@@ -235,37 +262,86 @@ class DatabaseSeeder extends Seeder
                 'validated_by'=> $agent1->id,
                 'views_count' => 98,
                 'usages'      => ['residence'],
+                'photos'      => ['propriete/divers/WhatsAppStudio1.jpeg',
+                                  'propriete/divers/WhatsAppStudio2.jpeg',
+                                  'propriete/divers/studio meublé.jpg',],
             ],
-        ];
 
-        // Photos Unsplash par type
-        $photosByType = [
-            'villa' => [
-                'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80',
-                'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80',
+            // ── Ajouts vides (à remplir) ───────────────────────────────
+            [
+                'user_id'     => $bailleur1->id,
+                'title'       => 'UN TRIPLEX DE HAUT STANDING EN LOCATION A OUAGA 2000 ZONE C',
+                'type'        => 'Appartement', // villa|appartement|terrain|commerce|batiment
+                'option'      => 'vente', // vente|location
+                'location'    => 'Ouagadougou,  zone C de Ouaga 2000',
+                'superficie'  => 900.00,
+                'price'       => 22000000,
+                'rooms'       => 16,
+                'floor'       => 5,
+                'furnished'   => false,
+                'description' => 'luxueuse résidence, dotée de finitions impeccables, située dans la zone C de Ouaga 2000. Idéalement implantée à proximité de l’ONASER Ouaga 2000, cette propriété se trouve dans un quartier résidentiel très calme.',
+                'status'      => 'publiee',
+                'is_agency'   => false,
+                'validated_by'=> $agent1->id,
+                'views_count' => 0,
+                'usages'      => ['residence'],
+                'photos'      => ['propriete/appartements/triplex1.jpg',
+                                  'propriete/appartements/triplex2.jpg',
+                                  'propriete/appartements/triplex3.jpg',
+                                  'propriete/appartements/triplex4.jpg',
+                                  'propriete/appartements/triplex5.jpg',],
+          ],
+            [
+                'user_id'     => $bailleur1->id,
+                'title'       => 'Terrain agricole aménagé de 5 hectares à vendre',
+                'type'        => 'terrain', // villa|appartement|terrain|commerce|batiment
+                'option'      => 'vente', // vente|location
+                'location'    => 'Bagré, Centre-Est',
+                'superficie'  =>  50000.00,
+                'price'       =>  15000000,
+                'rooms'       => 0,
+                'floor'       => 0,
+                'furnished'   => false,
+                'description' => 'Grand terrain agricole de 5 hectares situé dans une zone fertile et facilement accessible. Idéal pour les cultures maraîchères, céréalières ou les projets agro-pastoraux. Présence d’un point d’eau à proximité et accès par piste praticable toute l’année. Documents administratifs disponibles.',
+                'status'      => 'publiee',
+                'is_agency'   => false,
+                'validated_by'=> $agent1->id,
+                'views_count' => 0,
+                'usages'      => ['residence'],
+                'photos'      => ['propriete/terrains/terrain 3.JPG'],
             ],
-            'appartement' => [
-                'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80',
-                'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80',
+           [
+            'user_id'     => $bailleur1->id,
+            'title'       => 'Local commercial spacieux en bordure de voie',
+            'type'        => 'commerce',
+            'option'      => 'location',
+            'location'    => 'Ouagadougou, Zone du Bois',
+            'superficie'  => 120.00,
+            'price'       => 350000,
+            'rooms'       => 4,
+            'floor'       => 0,
+            'furnished'   => false,
+            'description' => 'Local commercial de 120 m² idéalement situé en bordure d’une voie très fréquentée. Convient pour une boutique, un showroom, une pharmacie, une agence ou tout autre commerce. Le bâtiment dispose d’un espace d’accueil, de plusieurs pièces de travail, d’un parking et d’un accès facile pour la clientèle.',
+            'status'      => 'publiee',
+            'is_agency'   => false,
+            'validated_by'=> $agent1->id,       
+            'views_count' => 0,
+            'usages'      => ['commerce'],
+            'photos'      => [
+                'propriete/commerces/commerce1.jpg',
+                'propriete/commerces/commerce2.webp',
+               
             ],
-            'terrain' => [
-                'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80',
-            ],
-            'commerce' => [
-                'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80',
-            ],
-            'batiment' => [
-                'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80',
-                'https://images.unsplash.com/photo-1464082354059-27db6ce50048?w=800&q=80',
-            ],
+],
         ];
-
-        $this->ensureDefaultPropertyImage();
 
         $createdProperties = [];
         foreach ($properties as $data) {
             $usages = $data['usages'];
             unset($data['usages']);
+
+            $photos = $data['photos'] ?? [];
+            unset($data['photos']);
 
             $property = Property::create($data);
             $createdProperties[] = $property;
@@ -276,25 +352,19 @@ class DatabaseSeeder extends Seeder
             }
 
             // Photos
-            $photos = $photosByType[$property->type] ?? ['properties/default.jpg'];
-            foreach ($photos as $i => $path) {
-                if (str_starts_with($path, 'http')) {
-                    $downloadedPath = $this->downloadRemoteImage($path, "properties/{$property->id}");
-                    $path = $downloadedPath ?? 'properties/default.jpg';
+            if (!empty($photos)) {
+                foreach ($photos as $i => $path) {
+                    PropertyPhoto::create([
+                        'property_id'   => $property->id,
+                        'path'          => $path,
+                        'original_name' => basename($path),
+                        'mime_type'     => 'image/jpeg',
+                        'is_main'       => $i === 0,
+                        'sort_order'    => $i,
+                    ]);
                 }
-
-                PropertyPhoto::create([
-                    'property_id'   => $property->id,
-                    'path'          => $path,
-                    'original_name' => basename($path),
-                    'mime_type'     => 'image/jpeg',
-                    'is_main'       => $i === 0,
-                    'sort_order'    => $i,
-                ]);
             }
         }
-
-        $this->downloadRemainingSiteImages();
 
         // ── Propriétés en attente de validation ───────────────────────
         $pending = Property::create([
@@ -344,6 +414,7 @@ class DatabaseSeeder extends Seeder
             'message'     => 'Je souhaite visiter cette villa le matin si possible.',
         ]);
 
+
         VisitRequest::create([
             'client_id'   => $client1->id,
             'property_id' => $createdProperties[1]->id,
@@ -385,51 +456,5 @@ class DatabaseSeeder extends Seeder
         $this->command->info('  client@immo.com    / password  (Client)');
         $this->command->info('  client2@immo.com   / password  (Client)');
     }
-
-    protected function downloadRemoteImage(string $url, string $directory): ?string
-    {
-        try {
-            $response = Http::withoutVerifying()->timeout(30)->get($url);
-            if (! $response->successful()) {
-                $this->command->warn("Impossible de télécharger l'image : {$url}");
-                return null;
-            }
-
-            $pathInfo = pathinfo(parse_url($url, PHP_URL_PATH) ?: '');
-            $filename = Str::slug($pathInfo['filename'] ?? 'image', '-');
-            $extension = $pathInfo['extension'] ?? 'jpg';
-            $extension = preg_match('/^[a-z0-9]+$/i', $extension) ? $extension : 'jpg';
-            $filename = $filename ?: 'image';
-            $filename = $filename . '-' . substr(md5($url), 0, 10) . '.' . $extension;
-
-            $path = trim($directory, '/') . '/' . $filename;
-            Storage::disk('public')->put($path, $response->body());
-
-            return $path;
-        } catch (\Throwable $exception) {
-            $this->command->warn("Erreur lors du téléchargement de l'image {$url} : {$exception->getMessage()}");
-            return null;
-        }
-    }
-
-    protected function ensureDefaultPropertyImage(): void
-    {
-        $defaultPath = 'properties/default.jpg';
-
-        if (Storage::disk('public')->exists($defaultPath)) {
-            return;
-        }
-
-        $jpeg = base64_decode(
-            '/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////2wBDAf//////////////////////////////////////////////////////////////////////////////////////wAARCAABAAEDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAUGB//EABQBAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhADEAAAAJwP/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPwA//8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAgEBPwA//8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAwEBPwA//9k='
-        );
-
-        Storage::disk('public')->put($defaultPath, $jpeg);
-    }
-
-    protected function downloadRemainingSiteImages(): void
-    {
-        // Aucun téléchargement supplémentaire nécessaire pour le moment.
-        // Cette méthode garde la logique prête pour d'autres images distantes.
-    }
 }
+

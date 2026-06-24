@@ -135,7 +135,8 @@ class PropertyController extends Controller
         }
 
         foreach ($request->file('photos') as $photo) {
-            $path = $photo->store('property_photos', 'public');
+            $baseDir = $this->photosBaseDirForType($property->type);
+            $path = $photo->store($baseDir, 'public');
             PropertyPhoto::create(['property_id' => $property->id, 'path' => $path]);
         }
 
@@ -177,4 +178,17 @@ class PropertyController extends Controller
         $property->delete();
         return redirect()->route('bailleur.properties')->with('success', 'Annonce supprimée.');
     }
+
+    private function photosBaseDirForType(string $type): string
+    {
+        return match ($type) {
+            'villa' => 'propriete/villas',
+            'appartement' => 'propriete/appartements',
+            'terrain' => 'propriete/terrains',
+            'commerce' => 'propriete/commerces',
+            'batiment' => 'propriete/immeubles',
+            default => 'propriete/divers',
+        };
+    }
 }
+
