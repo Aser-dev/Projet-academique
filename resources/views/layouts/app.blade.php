@@ -96,6 +96,15 @@
                    class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-blue-700 hover:bg-blue-50 transition-all {{ request('option')==='location' ? 'active bg-blue-50' : '' }}">
                     Location
                 </a>
+                 <a href="{{ route('contact.create') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 font-medium text-sm rounded-lg hover:bg-gray-100 transition-all">
+                    <span class="inline-flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7l9 6 9-6"/>
+                        </svg>
+                        Contact
+                    </span>
+                </a>
                 @auth
                 <a href="{{ route(auth()->user()->role.'.dashboard') }}"
                    class="px-4 py-2 text-sm font-medium text-gray-600 transition-all rounded-lg nav-link hover:text-blue-700 hover:bg-blue-50">

@@ -9,8 +9,14 @@ use App\Http\Controllers\ValidationController;
 use App\Http\Controllers\AgencyPropertyController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ContactController;
+
 
 Route::get('/', [PropertyController::class, 'index'])->name('home');
+
+Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
 Route::get('/property/{property}', [PropertyController::class, 'show'])->name('property.show');
 
 Route::middleware('auth')->group(function () {

@@ -35,7 +35,7 @@
                 <div class="absolute top-3 right-3">
                     <button
                         type="button"
-                        onclick="toggleFavorite({{ $property->id }})"
+onclick="toggleFavorite(event, {{ $property->id }})"
                         class="favorite-btn-{{ $property->id }} bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition">
 
                         @if($isFavorited)
@@ -79,7 +79,7 @@
 </div>
 
 <script>
-function toggleFavorite(propertyId) {
+function toggleFavorite(event, propertyId) {
     // Ne pas suivre le lien <a> parent
     event.stopPropagation();
 

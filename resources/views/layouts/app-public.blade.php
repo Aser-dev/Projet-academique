@@ -21,7 +21,7 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    @include('layouts.navigation-public')
+    @include('layouts.app')
 
     <!-- Page Content -->
     <main>
