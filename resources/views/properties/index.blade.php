@@ -9,7 +9,7 @@
 <section class="relative h-[520px] md:h-[580px] min-h-[420px] md:min-h-[480px]">
     <!-- Image de fond -->
     <div class="absolute inset-0 overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1600&q=85"
+        <img src="{{ asset('images/heroproperties.jpg') }}"
              alt="Immobilier" class="w-full h-full object-cover object-center">
         <div class="absolute inset-0" style="background:linear-gradient(to right, rgba(15,23,42,0.82) 0%, rgba(15,23,42,0.55) 55%, rgba(15,23,42,0.3) 100%)"></div>
     </div>
@@ -341,13 +341,16 @@ $canFavorite = auth()->check() && auth()->user()->role === 'client';
                     @foreach($featuredExperts as $expert)
                         @php
                             $fallbackPhotos = [
-                                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=160&q=80',
-                                'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&q=80',
-                                'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=160&q=80',
+                                asset('storage/propriete/avatars/AVATAR5.png'),
+                                asset('storage/propriete/avatars/AVATAR2.jpeg'),
+                                asset('storage/propriete/avatars/AVATAR_3.PNG'),
                             ];
+
+                            $defaultAvatar = asset('images/avatardefault.webp');
+
                             $expertPhoto = $expert->avatar
                                 ? asset('storage/'.$expert->avatar)
-                                : ($fallbackPhotos[$loop->index] ?? $fallbackPhotos[0]);
+                                : ($fallbackPhotos[$loop->index] ?? $fallbackPhotos[0] ?? $defaultAvatar);
                         @endphp
                         <img src="{{ $expertPhoto }}" alt="{{ $expert->name }}" class="h-12 w-12 rounded-full border-2 border-white object-cover shadow-sm">
                     @endforeach

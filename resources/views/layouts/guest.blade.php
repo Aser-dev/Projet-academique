@@ -35,7 +35,7 @@
 
     <!-- ── Panneau gauche ── -->
     <div class="hidden lg:flex lg:w-[55%] relative overflow-hidden">
-        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1400&q=85"
+        <img src="{{ asset('images/bglogin1.jpg') }}"
              class="absolute inset-0 w-full h-full object-cover" alt="">
         <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(15,23,42,0.88) 0%,rgba(30,58,138,0.7) 50%,rgba(37,99,235,0.4) 100%)"></div>
 
@@ -89,7 +89,7 @@
             <div class="rounded-2xl p-5"
                  style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); backdrop-filter:blur(8px)">
                 <div class="flex items-center gap-3 mb-3">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=40&h=40&fit=crop&q=80"
+                    <img src="{{ asset('images/avatardefault.webp') }}"
                          class="w-10 h-10 rounded-full object-cover border-2 border-white/20" alt="">
                     <div>
                         <p class="text-white text-sm font-semibold">Mamadou D.</p>
