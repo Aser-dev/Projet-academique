@@ -36,21 +36,19 @@
     <!-- ── Panneau gauche ── -->
     <div class="hidden lg:flex lg:w-[55%] relative overflow-hidden">
         <img src="{{ asset('images/bglogin1.jpg') }}"
-             class="absolute inset-0 w-full h-full object-cover" alt="">
+             class="absolute inset-0 object-cover w-full h-full" alt="">
         <div class="absolute inset-0" style="background:linear-gradient(135deg,rgba(15,23,42,0.88) 0%,rgba(30,58,138,0.7) 50%,rgba(37,99,235,0.4) 100%)"></div>
 
         <div class="relative z-10 flex flex-col justify-between h-full p-12">
             <!-- Logo -->
-            <a href="{{ route('home') }}" class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-2xl flex items-center justify-center"
-                     style="background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.2); backdrop-filter:blur(8px)">
-                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
-                    </svg>
+             <a href="{{ route('home') }}" class="flex items-center gap-3 group">
+                <div class="flex items-center justify-center shadow-md w-9 h-9 rounded-xl"
+                     >
+                    <img src="{{ asset('images/logo.png') }}" alt="ImmoSN">
                 </div>
-                <div>
-                    <p class="text-white font-bold text-xl leading-none">ImmoSN</p>
-                    <p class="text-blue-300 text-[10px] tracking-widest uppercase">Immobilier</p>
+                <div class="leading-none">
+                    <span class="text-lg font-bold tracking-tight text-gray-900">Immo</span><span class="text-lg font-bold tracking-tight" style="color:#1d4ed8">SN</span>
+                    <p class="text-[9px] text-gray-400 font-medium tracking-widest uppercase">Immobilier</p>
                 </div>
             </a>
 
@@ -62,38 +60,38 @@
                     N°1 de l'immobilier au Burkina
                 </div>
 
-                <h2 class="text-4xl font-extrabold text-white leading-tight mb-4" style="letter-spacing:-0.02em">
+                <h2 class="mb-4 text-4xl font-extrabold leading-tight text-white" style="letter-spacing:-0.02em">
                     Votre prochain<br>
                     <span style="background:linear-gradient(90deg,#93c5fd,#a5b4fc); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text">
                         chez-vous
                     </span><br>
                     vous attend ici.
                 </h2>
-                <p class="text-slate-300 text-base mb-10">
+                <p class="mb-10 text-base text-slate-300">
                     Des annonces vérifiées partout au Burkina — villas, appartements, terrains.
                 </p>
 
                 <!-- Stats -->
                 <div class="grid grid-cols-3 gap-4">
                     @foreach([['500+','Annonces'],['5','Villes'],['100%','Vérifiées']] as [$n,$l])
-                    <div class="rounded-2xl p-4 text-center"
+                    <div class="p-4 text-center rounded-2xl"
                          style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); backdrop-filter:blur(8px)">
-                        <p class="text-white text-2xl font-extrabold">{{ $n }}</p>
-                        <p class="text-slate-400 text-xs mt-1">{{ $l }}</p>
+                        <p class="text-2xl font-extrabold text-white">{{ $n }}</p>
+                        <p class="mt-1 text-xs text-slate-400">{{ $l }}</p>
                     </div>
                     @endforeach
                 </div>
             </div>
 
             <!-- Testimonial -->
-            <div class="rounded-2xl p-5"
+            <div class="p-5 rounded-2xl"
                  style="background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.12); backdrop-filter:blur(8px)">
                 <div class="flex items-center gap-3 mb-3">
                     <img src="{{ asset('images/avatardefault.webp') }}"
-                         class="w-10 h-10 rounded-full object-cover border-2 border-white/20" alt="">
+                         class="object-cover w-10 h-10 border-2 rounded-full border-white/20" alt="">
                     <div>
-                        <p class="text-white text-sm font-semibold">Mamadou D.</p>
-                        <p class="text-slate-400 text-xs">Client vérifié</p>
+                        <p class="text-sm font-semibold text-white">Mamadou D.</p>
+                        <p class="text-xs text-slate-400">Client vérifié</p>
                     </div>
                     <div class="ml-auto flex gap-0.5">
                         @for($i=0;$i<5;$i++)
@@ -101,7 +99,7 @@
                         @endfor
                     </div>
                 </div>
-                <p class="text-slate-300 text-xs leading-relaxed italic">"Trouvé ma villa en 4 jours. Service impeccable !"</p>
+                <p class="text-xs italic leading-relaxed text-slate-300">"Trouvé ma villa en 4 jours. Service impeccable !"</p>
             </div>
         </div>
     </div>
@@ -109,9 +107,9 @@
     <!-- ── Panneau droit formulaire ── -->
     <div class="w-full lg:w-[45%] flex flex-col bg-white overflow-y-auto">
         <!-- Header mobile -->
-        <div class="lg:hidden flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100 lg:hidden">
             <a href="{{ route('home') }}" class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,#2563eb,#1e3a8a)">
+                <div class="flex items-center justify-center w-8 h-8 rounded-xl" style="background:linear-gradient(135deg,#2563eb,#1e3a8a)">
                     <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/></svg>
                 </div>
                 <span class="font-bold text-gray-900">Immo<span class="text-blue-600">SN</span></span>
@@ -120,7 +118,7 @@
         </div>
 
         <!-- Formulaire -->
-        <div class="flex-1 flex items-center justify-center p-8 lg:p-14">
+        <div class="flex items-center justify-center flex-1 p-8 lg:p-14">
             <div class="w-full max-w-md">
                 {{ $slot }}
             </div>

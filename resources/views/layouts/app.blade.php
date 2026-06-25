@@ -93,7 +93,7 @@
                    class="nav-link px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-blue-700 hover:bg-blue-50 transition-all {{ request('option')==='location' ? 'active bg-blue-50' : '' }}">
                     Location
                 </a>
-                 <a href="{{ route('contact.create') }}" class="px-4 py-2 text-gray-700 hover:text-blue-600 font-medium text-sm rounded-lg hover:bg-gray-100 transition-all">
+                 <a href="{{ route('contact.create') }}" class="px-4 py-2 text-sm font-medium text-gray-700 transition-all rounded-lg hover:text-blue-600 hover:bg-gray-100">
                     <span class="inline-flex items-center gap-1">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z"/>
@@ -251,10 +251,10 @@
                         >
                         <img src="{{ asset('images/logo.png') }}" alt="ImmoSN">
                     </div>
-                    <div>
-                        <p class="text-lg font-bold leading-none tracking-tight text-white">ImmoSN</p>
-                        <p class="text-slate-500 text-[10px] tracking-widest uppercase">Immobilier Burkina Faso</p>
-                    </div>
+                     <div class="leading-none">
+                    <span class="text-lg font-bold tracking-tight text-black-900">Immo</span><span class="text-lg font-bold tracking-tight" style="color:#1d4ed8">SN</span>
+                    <p class="text-[9px] text-gray-400 font-medium tracking-widest uppercase">Immobilier</p>
+                </div>
                 </div>
                 <p class="max-w-sm text-sm leading-relaxed text-slate-500">
 La référence de l'immobilier au Burkina Faso. Achetez, vendez ou louez votre bien en toute confiance avec des annonces vérifiées.
