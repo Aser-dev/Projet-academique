@@ -6,17 +6,17 @@
 <!-- ══════════════════════════════════════
      HERO SECTION
 ══════════════════════════════════════ -->
-<section class="relative h-[520px] md:h-[580px] min-h-[420px] md:min-h-[480px]">
+<section class="relative h-auto min-h-[600px] md:min-h-[520px] md:h-[580px]">
     <!-- Image de fond -->
     <div class="absolute inset-0 overflow-hidden">
         <img src="{{ asset('images/heroproperties.jpg') }}"
-             alt="Immobilier" class="w-full h-full object-cover object-center">
+             alt="Immobilier" class="object-cover object-center w-full h-full">
         <div class="absolute inset-0" style="background:linear-gradient(to right, rgba(15,23,42,0.82) 0%, rgba(15,23,42,0.55) 55%, rgba(15,23,42,0.3) 100%)"></div>
     </div>
 
     <!-- Contenu Hero -->
-    <div class="relative z-10 h-full flex items-center">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+    <div class="relative z-10 flex items-center h-full pt-24 pb-8">
+        <div class="w-full px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
             <div class="max-w-xl">
                 <!-- Tag -->
                 <div class="inline-flex items-center gap-2 mb-5 px-3 py-1.5 rounded-full text-xs font-semibold text-white"
@@ -25,29 +25,30 @@
                     Plus de {{ $properties->total() }} annonces disponibles
                 </div>
 
-                <h1 class="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-4" style="letter-spacing:-0.02em">
+                <h1 class="mb-4 text-4xl font-extrabold leading-tight text-white md:text-5xl" style="letter-spacing:-0.02em">
                     Trouvez le bien<br>
                     <span style="background:linear-gradient(90deg,#60a5fa,#818cf8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text">
                         qui vous correspond
                     </span>
                 </h1>
-                <p class="text-lg text-slate-300 mb-8">
+                <p class="mb-8 text-lg text-slate-300">
                     Villas, appartements, terrains — des annonces vérifiées partout au Burkina.
                 </p>
 
-                <!-- Barre de recherche -->
+<!-- Barre de recherche -->
                 <form method="GET" action="{{ route('home') }}"
-                      class="bg-white rounded-2xl p-2 shadow-2xl flex flex-col sm:flex-row gap-2"
+
+                      class="flex flex-col gap-2 p-2 bg-white shadow-2xl rounded-2xl sm:flex-row"
                       style="box-shadow:0 25px 60px rgba(0,0,0,0.4)">
 
                     <!-- Recherche texte -->
                     <div class="flex items-center gap-2 flex-1 px-4 py-2.5 bg-gray-50 rounded-xl">
-                        <svg class="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="flex-shrink-0 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                         </svg>
                         <input type="text" name="search" value="{{ request('search') }}"
                                placeholder="Ville, quartier, titre..."
-                               class="flex-1 bg-transparent text-sm text-gray-800 placeholder-gray-400 outline-none">
+                               class="flex-1 text-sm text-gray-800 placeholder-gray-400 bg-transparent outline-none">
                     </div>
 
                     <!-- Type -->
@@ -67,6 +68,23 @@
                         <option value="location" {{ request('option')=='location'?'selected':'' }}>Location</option>
                     </select>
 
+                    <!-- Prix min -->
+                    <input type="number"
+                           name="price_min"
+                           value="{{ request('price_min') }}"
+                           placeholder="Prix min (FCFA)"
+                           class="px-4 py-2.5 bg-gray-50 rounded-xl text-sm text-gray-700 outline-none border-0 sm:w-36"
+                           min="0">
+
+                    <!-- Prix max -->
+                    <input type="number"
+                           name="price_max"
+                           value="{{ request('price_max') }}"
+                           placeholder="Prix max (FCFA)"
+                           class="px-4 py-2.5 bg-gray-50 rounded-xl text-sm text-gray-700 outline-none border-0 sm:w-36"
+                           min="0">
+
+
                     <!-- Bouton -->
                     <button type="submit"
                             class="flex items-center justify-center gap-2 px-6 py-2.5 text-white text-sm font-bold rounded-xl whitespace-nowrap transition-all hover:-translate-y-0.5"
@@ -83,7 +101,7 @@
                     <span class="text-xs text-slate-400">Populaires :</span>
                     @foreach(['Ouagadougou','Bobo-Dioulasso','Koudougou','Banfora','Villa','Appartement'] as $tag)
                     <a href="{{ route('home') }}?search={{ urlencode($tag) }}"
-                       class="px-3 py-1 rounded-full text-xs font-medium text-white hover:text-white transition-all"
+                       class="px-3 py-1 text-xs font-medium text-white transition-all rounded-full hover:text-white"
                        style="background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18); backdrop-filter:blur(4px)">
                         {{ $tag }}
                     </a>
@@ -98,12 +116,12 @@
      STATS BAR
 ══════════════════════════════════════ -->
 <section class="bg-white border-b border-gray-200 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-200">
+    <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div class="grid grid-cols-2 divide-x divide-gray-200 md:grid-cols-4">
             @foreach([[$properties->total().' +','Annonces actives','text-blue-600'],['5','Villes couvertes','text-blue-600'],['100%','Annonces vérifiées','text-green-600'],['24/7','Support client','text-blue-600']] as [$v,$l,$c])
             <div class="flex items-center gap-4 px-8 py-5">
                 <p class="text-2xl font-extrabold {{ $c }}">{{ $v }}</p>
-                <p class="text-sm text-gray-500 font-medium leading-tight">{{ $l }}</p>
+                <p class="text-sm font-medium leading-tight text-gray-500">{{ $l }}</p>
             </div>
             @endforeach
         </div>
@@ -113,8 +131,8 @@
 <!-- ══════════════════════════════════════
      FILTRES CATÉGORIES
 ══════════════════════════════════════ -->
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
-    <div class="flex items-center gap-3 overflow-x-auto pb-1" style="scrollbar-width:none">
+<section class="px-4 mx-auto mt-10 max-w-7xl sm:px-6 lg:px-8">
+    <div class="flex items-center gap-3 pb-1 overflow-x-auto" style="scrollbar-width:none">
         @php
         $types = [
             [null,       'Tous',         'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
@@ -130,7 +148,7 @@
         <a href="{{ route('home') }}{{ $val ? '?type='.$val : '' }}"
            class="flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-semibold whitespace-nowrap transition-all flex-shrink-0 {{ $active ? 'text-white shadow-lg' : 'text-gray-600 bg-white border border-gray-200 hover:border-blue-400 hover:text-blue-700' }}"
            style="{{ $active ? 'background:linear-gradient(135deg,#2563eb,#1e3a8a); box-shadow:0 4px 14px rgba(37,99,235,0.35)' : '' }}">
-            <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="flex-shrink-0 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="{{ $path }}"/>
             </svg>
             {{ $label }}
@@ -142,7 +160,7 @@
 <!-- ══════════════════════════════════════
      GRILLE ANNONCES
 ══════════════════════════════════════ -->
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+<section class="px-4 py-10 mx-auto max-w-7xl sm:px-6 lg:px-8">
     @php
         $favoritePropertyIds = auth()->check() && auth()->user()->role === 'client'
             ? auth()->user()->favorites()->whereIn('property_id', $properties->pluck('id'))->pluck('property_id')->all()
@@ -175,10 +193,10 @@
 
     @if($properties->count() > 0)
     <!-- Grille -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         @foreach($properties as $property)
         @php $isFavorited = in_array($property->id, $favoritePropertyIds); @endphp
-        <article class="card group bg-white rounded-2xl overflow-hidden border border-gray-100"
+        <article class="overflow-hidden bg-white border border-gray-100 card group rounded-2xl"
                  style="box-shadow:0 1px 6px rgba(0,0,0,0.07)">
 
             <!-- Image -->
@@ -187,9 +205,9 @@
                 @if($property->photos->first())
                 <img src="{{ $property->photos->first()->url }}"
                      alt="{{ $property->title }}"
-                     class="card-img w-full h-full object-cover">
+                     class="object-cover w-full h-full card-img">
                 @else
-                <div class="w-full h-full flex flex-col items-center justify-center gap-2">
+                <div class="flex flex-col items-center justify-center w-full h-full gap-2">
                     <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
                     </svg>
@@ -210,7 +228,7 @@
                 </div>
 
                 <!-- Actions image -->
-                <div class="absolute top-3 right-3 flex items-center gap-2">
+                <div class="absolute flex items-center gap-2 top-3 right-3">
 @php
 $canFavorite = auth()->check() && auth()->user()->role === 'client';
                 @endphp
@@ -223,7 +241,7 @@ $canFavorite = auth()->check() && auth()->user()->role === 'client';
                             onclick="togglePropertyFavorite(event, this)"
                             aria-label="{{ $isFavorited ? 'Retirer des favoris' : 'Ajouter aux favoris' }}"
                             aria-pressed="{{ $isFavorited ? 'true' : 'false' }}"
-                            class="flex items-center justify-center w-9 h-9 rounded-full bg-white/95 shadow-lg transition hover:bg-white hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-300">
+                            class="flex items-center justify-center transition rounded-full shadow-lg w-9 h-9 bg-white/95 hover:bg-white hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-300">
                         <svg class="w-5 h-5 {{ $isFavorited ? 'text-red-500' : 'text-gray-500' }}" fill="{{ $isFavorited ? 'currentColor' : 'none' }}" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
                         </svg>
@@ -238,9 +256,9 @@ $canFavorite = auth()->check() && auth()->user()->role === 'client';
 
                 <!-- Prix -->
                 <div class="absolute bottom-3 left-3 right-3">
-                    <p class="text-white font-bold text-lg leading-none">
+                    <p class="text-lg font-bold leading-none text-white">
                         {{ number_format($property->price, 0, ',', ' ') }}
-                        <span class="text-white/70 text-xs font-normal">
+                        <span class="text-xs font-normal text-white/70">
                             FCFA{{ $property->option === 'location' ? '/mois' : '' }}
                         </span>
                     </p>
@@ -253,7 +271,7 @@ $canFavorite = auth()->check() && auth()->user()->role === 'client';
                     {{ ucfirst($property->type) }}
                 </p>
                 <a href="{{ route('property.show', $property) }}" class="block">
-                    <h3 class="text-sm font-semibold text-gray-900 leading-snug line-clamp-2 group-hover:text-blue-700 transition-colors mb-2" style="min-height:2.5rem">
+                    <h3 class="mb-2 text-sm font-semibold leading-snug text-gray-900 transition-colors line-clamp-2 group-hover:text-blue-700" style="min-height:2.5rem">
                         {{ $property->title }}
                     </h3>
                 </a>
@@ -264,11 +282,11 @@ $canFavorite = auth()->check() && auth()->user()->role === 'client';
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                     </svg>
-                    <span class="truncate font-medium">{{ $property->location }}</span>
+                    <span class="font-medium truncate">{{ $property->location }}</span>
                 </div>
 
                 <!-- Caractéristiques -->
-                <div class="flex items-center gap-3 pt-3 border-t border-gray-100 text-xs text-gray-500">
+                <div class="flex items-center gap-3 pt-3 text-xs text-gray-500 border-t border-gray-100">
                     @if($property->rooms)
                     <span class="flex items-center gap-1 font-medium">
                         <svg class="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
@@ -282,7 +300,7 @@ $canFavorite = auth()->check() && auth()->user()->role === 'client';
                     </span>
                     @endif
                     @if($property->furnished)
-                    <span class="text-emerald-600 font-semibold ml-auto">Meublé</span>
+                    <span class="ml-auto font-semibold text-emerald-600">Meublé</span>
                     @endif
                 </div>
             </div>
@@ -298,40 +316,40 @@ $canFavorite = auth()->check() && auth()->user()->role === 'client';
     @else
     <!-- Empty state -->
     <div class="text-center py-28">
-        <div class="w-20 h-20 rounded-3xl bg-gray-100 flex items-center justify-center mx-auto mb-5">
+        <div class="flex items-center justify-center w-20 h-20 mx-auto mb-5 bg-gray-100 rounded-3xl">
             <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
         </div>
-        <h3 class="text-xl font-bold text-gray-800 mb-2">Aucun résultat</h3>
-        <p class="text-gray-400 mb-8">Modifiez vos critères pour trouver votre bien.</p>
+        <h3 class="mb-2 text-xl font-bold text-gray-800">Aucun résultat</h3>
+        <p class="mb-8 text-gray-400">Modifiez vos critères pour trouver votre bien.</p>
         <a href="{{ route('home') }}"
-           class="inline-flex items-center gap-2 px-6 py-3 text-white font-semibold rounded-xl transition-all"
+           class="inline-flex items-center gap-2 px-6 py-3 font-semibold text-white transition-all rounded-xl"
            style="background:linear-gradient(135deg,#2563eb,#1e3a8a)">
             Voir toutes les annonces
         </a>
     </div>
     @endif
 </section>
-
+@auth
 <!-- ══════════════════════════════════════
      PLATFORM EXPERTS (Experts locaux)
 ══════════════════════════════════════ -->
 @if(isset($platformExperts) && $platformExperts->flatten()->isNotEmpty() && !request()->hasAny(['search','type','option']))
-<section class="bg-white py-16">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<section class="py-16 bg-white">
+    <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div class="grid items-end gap-8 border-b border-slate-200 pb-10 lg:grid-cols-[1fr_auto]">
             <div class="max-w-3xl">
-                <span class="text-xs font-extrabold uppercase tracking-widest text-blue-700">Experts locaux</span>
+                <span class="text-xs font-extrabold tracking-widest text-blue-700 uppercase">Experts locaux</span>
                 <h2 class="mt-3 text-3xl font-extrabold tracking-tight text-slate-950 md:text-5xl">
                     Des conseillers immobiliers prêts à vous guider
                 </h2>
-                <p class="mt-4 max-w-2xl text-base leading-7 text-slate-600">
+                <p class="max-w-2xl mt-4 text-base leading-7 text-slate-600">
                     Une sélection de managers, agents et bailleurs partenaires pour vérifier les annonces, organiser les visites et simplifier vos décisions.
                 </p>
             </div>
 
-            <div class="rounded-lg border border-slate-200 bg-slate-50 p-4">
+            <div class="p-4 border rounded-lg border-slate-200 bg-slate-50">
                 <div class="flex -space-x-3">
                     @php
                         $allExperts = $platformExperts->flatten();
@@ -352,7 +370,7 @@ $canFavorite = auth()->check() && auth()->user()->role === 'client';
                                 ? asset('storage/'.$expert->avatar)
                                 : ($fallbackPhotos[$loop->index] ?? $fallbackPhotos[0] ?? $defaultAvatar);
                         @endphp
-                        <img src="{{ $expertPhoto }}" alt="{{ $expert->name }}" class="h-12 w-12 rounded-full border-2 border-white object-cover shadow-sm">
+                        <img src="{{ $expertPhoto }}" alt="{{ $expert->name }}" class="object-cover w-12 h-12 border-2 border-white rounded-full shadow-sm">
                     @endforeach
                 </div>
                 <p class="mt-3 text-sm font-bold text-slate-900">{{ $allExperts->count() }} experts disponibles</p>
@@ -360,22 +378,22 @@ $canFavorite = auth()->check() && auth()->user()->role === 'client';
             </div>
         </div>
 
-        <div class="mt-8 flex flex-wrap gap-3">
+        <div class="flex flex-wrap gap-3 mt-8">
             @if($platformExperts->has('manager'))
-                <span class="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-4 py-2 text-sm font-bold text-indigo-700">
-                    <span class="h-2 w-2 rounded-full bg-indigo-500"></span>
+                <span class="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold text-indigo-700 border border-indigo-100 rounded-full bg-indigo-50">
+                    <span class="w-2 h-2 bg-indigo-500 rounded-full"></span>
                     {{ $platformExperts['manager']->count() }} Managers
                 </span>
             @endif
             @if($platformExperts->has('agent'))
-                <span class="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-bold text-blue-700">
-                    <span class="h-2 w-2 rounded-full bg-blue-500"></span>
+                <span class="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold text-blue-700 border border-blue-100 rounded-full bg-blue-50">
+                    <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
                     {{ $platformExperts['agent']->count() }} Agents
                 </span>
             @endif
             @if($platformExperts->has('bailleur'))
-                <span class="inline-flex items-center gap-2 rounded-full border border-emerald-100 bg-emerald-50 px-4 py-2 text-sm font-bold text-emerald-700">
-                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                <span class="inline-flex items-center gap-2 px-4 py-2 text-sm font-bold border rounded-full border-emerald-100 bg-emerald-50 text-emerald-700">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
                     {{ $platformExperts['bailleur']->count() }} Bailleurs
                 </span>
             @endif
@@ -393,7 +411,7 @@ $canFavorite = auth()->check() && auth()->user()->role === 'client';
             @foreach($roleSections as $roleKey => $section)
                 @if($platformExperts->has($roleKey) && $platformExperts[$roleKey]->isNotEmpty())
                     <div>
-                        <div class="mb-6 flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
+                        <div class="flex flex-col justify-between gap-2 mb-6 sm:flex-row sm:items-end">
                             <div>
                                 <h3 class="text-xl font-extrabold text-slate-950">{{ $section['title'] }}</h3>
                                 <p class="mt-1 text-sm text-slate-500">{{ $section['subtitle'] }}</p>
@@ -411,14 +429,14 @@ $canFavorite = auth()->check() && auth()->user()->role === 'client';
             @endforeach
         </div>
 
-        <div class="mt-16 border-t border-slate-200 pt-10">
+        <div class="pt-10 mt-16 border-t border-slate-200">
             <div class="grid grid-cols-1 gap-4 text-center md:grid-cols-3">
                 @foreach([
                     ['100%', 'Annonces vérifiées', 'Chaque bien est contrôlé par nos agents'],
                     ['Sous 24h', 'Réponse rapide', 'Prise en charge de vos demandes de visite'],
                     ['De A à Z', 'Accompagnement', 'De la recherche à la signature'],
                 ] as [$value, $label, $desc])
-                    <div class="rounded-lg border border-slate-200 bg-slate-50 p-6">
+                    <div class="p-6 border rounded-lg border-slate-200 bg-slate-50">
                         <p class="mb-1 text-2xl font-extrabold text-slate-950">{{ $value }}</p>
                         <p class="mb-1 text-sm font-bold text-blue-700">{{ $label }}</p>
                         <p class="text-xs text-slate-500">{{ $desc }}</p>
@@ -434,30 +452,30 @@ $canFavorite = auth()->check() && auth()->user()->role === 'client';
      PLATFORM EXPERTS (Experts locaux)
 ══════════════════════════════════════ -->
 @guest
-<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-    <div class="relative overflow-hidden rounded-3xl px-8 py-14 md:px-16 text-white"
+<section class="px-4 mx-auto mb-16 max-w-7xl sm:px-6 lg:px-8">
+    <div class="relative px-8 overflow-hidden text-white rounded-3xl py-14 md:px-16"
          style="background:linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%)">
         <!-- Décorations -->
-        <div class="absolute top-0 right-0 w-72 h-72 rounded-full opacity-10" style="background:white; transform:translate(30%,-30%)"></div>
+        <div class="absolute top-0 right-0 rounded-full w-72 h-72 opacity-10" style="background:white; transform:translate(30%,-30%)"></div>
         <div class="absolute bottom-0 left-0 w-56 h-56 rounded-full opacity-10" style="background:white; transform:translate(-30%,30%)"></div>
 
-        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="relative z-10 flex flex-col items-center justify-between gap-8 md:flex-row">
             <div class="max-w-lg">
-                <p class="text-blue-200 text-sm font-semibold uppercase tracking-widest mb-3">Pour les bailleurs</p>
-                <h3 class="text-3xl font-extrabold mb-3" style="letter-spacing:-0.02em">
+                <p class="mb-3 text-sm font-semibold tracking-widest text-blue-200 uppercase">Pour les bailleurs</p>
+                <h3 class="mb-3 text-3xl font-extrabold" style="letter-spacing:-0.02em">
                     Vendez ou louez<br>votre bien rapidement
                 </h3>
-                <p class="text-blue-200 text-base">
+                <p class="text-base text-blue-200">
                     Publiez gratuitement et touchez des milliers d'acheteurs et locataires potentiels dès aujourd'hui.
                 </p>
             </div>
-            <div class="flex items-center gap-3 flex-shrink-0">
+            <div class="flex items-center flex-shrink-0 gap-3">
                 <a href="{{ route('login') }}"
-                   class="px-6 py-3 rounded-xl border-2 border-white/30 text-white font-semibold hover:bg-white/10 transition text-sm">
+                   class="px-6 py-3 text-sm font-semibold text-white transition border-2 rounded-xl border-white/30 hover:bg-white/10">
                     Connexion
                 </a>
                 <a href="{{ route('register') }}"
-                   class="px-6 py-3 rounded-xl bg-white font-bold hover:bg-blue-50 transition shadow-xl text-sm"
+                   class="px-6 py-3 text-sm font-bold transition bg-white shadow-xl rounded-xl hover:bg-blue-50"
                    style="color:#1d4ed8">
                     Créer un compte →
                 </a>
@@ -466,7 +484,7 @@ $canFavorite = auth()->check() && auth()->user()->role === 'client';
     </div>
 </section>
 @endguest
-
+@endauth
 @push('scripts')
 <script>
 function favoriteHeartIcon(favorited) {
