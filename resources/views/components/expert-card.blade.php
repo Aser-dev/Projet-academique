@@ -4,36 +4,41 @@
             'badge' => 'bg-indigo-50 text-indigo-700 border-indigo-100',
             'accent' => 'text-indigo-700',
             'line' => 'bg-indigo-600',
-            'photo' => 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=640&q=80',
+            'photo' => asset('storage/propriete/avatars/AVATAR5.png'),
             'icon' => 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z',
         ],
         'agent' => [
             'badge' => 'bg-blue-50 text-blue-700 border-blue-100',
             'accent' => 'text-blue-700',
             'line' => 'bg-blue-600',
-            'photo' => 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=640&q=80',
+            'photo' => asset('storage/propriete/avatars/AVATAR2.jpeg'),
             'icon' => 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z',
         ],
         'bailleur' => [
             'badge' => 'bg-emerald-50 text-emerald-700 border-emerald-100',
             'accent' => 'text-emerald-700',
             'line' => 'bg-emerald-600',
-            'photo' => 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=640&q=80',
+            'photo' => asset('storage/propriete/avatars/avatar3.webp'),
             'icon' => 'M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z',
         ],
     ];
     $style = $roleStyles[$expert->role] ?? $roleStyles['agent'];
     $stat = $expert->expert_stat;
     $fallbackPhotos = [
-        'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=640&q=80',
-        'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=640&q=80',
-        'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=640&q=80',
-        'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=640&q=80',
-        'https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=640&q=80',
-        'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=640&q=80',
+        asset('storage/propriete/avatars/AVATAR5.png'),
+        asset('storage/propriete/avatars/AVATAR5.png'),
+        asset('storage/propriete/avatars/AVATAR_3.PNG'),
+        asset('storage/propriete/avatars/AVATAR_3.PNG'),
+        asset('storage/propriete/avatars/AVATAR_3.PNG'),
+        asset('storage/propriete/avatars/AVATAR_3.PNG'),
     ];
+
     $fallbackPhoto = $fallbackPhotos[$expert->id % count($fallbackPhotos)] ?? $style['photo'];
-    $photoUrl = $expert->avatar ? asset('storage/'.$expert->avatar) : $fallbackPhoto;
+    $defaultAvatar = asset('images/avatardefault.webp');
+
+    $photoUrl = $expert->avatar
+        ? asset('storage/'.$expert->avatar)
+        : ($fallbackPhoto ?: $defaultAvatar);
 @endphp
 
 <article class="expert-card group overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:border-slate-300">
