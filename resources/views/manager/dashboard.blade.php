@@ -107,8 +107,57 @@
             </div>
         </div>
 
+        <!-- Pending Properties - EF-D8/EF-D7 -->
+        <div class="bg-white shadow-sm rounded-lg p-6 mt-8">
+            <h2 class="text-xl font-semibold mb-4">Annonces en attente de validation</h2>
+
+            @if($pendingProperties->isEmpty())
+                <p class="text-gray-500">Aucune annonce en attente de validation</p>
+            @else
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Titre</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bailleur</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date de soumission</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white border-t border-gray-200">
+                            @foreach($pendingProperties as $property)
+                                <tr>
+                                    <td class="px-6 py-4 text-sm text-gray-900">{{ $property->title }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">{{ ucfirst($property->type) }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $property->user->name ?? 'N/A' }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-500">{{ $property->created_at?->format('d/m/Y') }}</td>
+                                    <td class="px-6 py-4 text-sm space-x-3">
+                                        <form method="POST" action="{{ route('manager.properties.validate', $property) }}" class="inline">
+                                            @csrf
+                                            <button type="submit" class="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold">
+                                                ✓ Valider
+                                            </button>
+                                        </form>
+
+                                        <form method="POST" action="{{ route('manager.properties.reject', $property) }}" class="inline">
+                                            @csrf
+                                            <button type="submit" onclick="return confirm('Rejeter cette annonce ?')" class="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold">
+                                                ✗ Rejeter
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+        </div>
+
         <!-- Action Buttons -->
         <div class="mt-8 flex gap-4">
+
             <a href="{{ route('manager.users') }}" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                 Gérer Utilisateurs
             </a>
