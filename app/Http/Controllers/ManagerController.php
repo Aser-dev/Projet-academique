@@ -16,8 +16,14 @@ class ManagerController extends Controller
     {
         $totalProperties = (int) Property::count();
 
+        $pendingProperties = Property::where('status', 'en_attente')
+            ->with('user')
+            ->latest()
+            ->get();
+
         $stats = [
             'total_properties' => $totalProperties,
+
             'published_properties' => Property::where('status', 'publiee')->count(),
             'pending_validations' => Property::where('status', 'en_attente')->count(),
             'properties_by_type' => Property::select('type')
@@ -35,7 +41,7 @@ class ManagerController extends Controller
                 ->get(),
         ];
 
-        return view('manager.dashboard', compact('stats'));
+        return view('manager.dashboard', compact('stats', 'pendingProperties'));
     }
 
     // EF-D7: Page statistiques détaillées
@@ -183,4 +189,30 @@ class ManagerController extends Controller
         return back()->with('success', 'Annonce retirée.');
     }
 
+    // EF-D8: Valider une annonce
+    public function validateProperty(Request $request, Property $property)
+    {
+        // Important : les valeurs de status doivent correspondre à la contrainte DB.
+        // Ici, on utilise exactement celles déjà utilisées dans le projet.
+        $property->update([
+            'status' => 'publiee',
+            'validated_by' => Auth::id(),
+        ]);
+
+        return back()->with('success', 'Annonce publiée.');
+    }
+
+    // EF-D8: Rejeter une annonce
+    public function rejectProperty(Request $request, Property $property)
+    {
+        // Fix warning 1265: status doit être une valeur autorisée par la DB.
+        // Dans ce projet, le rejet est géré côté agent par le status 'rejetee'.
+        $property->update([
+            'status' => 'rejetee',
+        ]);
+
+        return back()->with('success', 'Annonce rejetée.');
+    }
+
 }
+

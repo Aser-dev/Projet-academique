@@ -61,6 +61,20 @@
                             <a href="{{ route('property.show', $property) }}" class="flex-1 px-4 py-2 bg-gray-900 text-white text-sm font-semibold rounded-xl hover:bg-black text-center">
                                 Voir
                             </a>
+
+
+                            <a href="{{ route('agent.properties.edit', ['property' => $property->id]) }}" class="px-4 py-2 bg-indigo-600 text-white text-sm font-semibold rounded-xl hover:bg-indigo-700 text-center">
+                                Modifier
+                            </a>
+                            </a>
+
+                            <form action="{{ route('agent.properties.destroy', $property) }}" method="POST" onsubmit="return confirm('Supprimer cette annonce ?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-xl hover:bg-red-700 text-center">
+                                    Supprimer
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

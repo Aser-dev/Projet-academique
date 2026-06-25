@@ -157,10 +157,108 @@
     </div>
 </section>
 
+<!-- SECTION PROMOTIONS -->
+<section class="px-4 mx-auto mt-10 max-w-7xl sm:px-6 lg:px-8">
+    <div class="mb-6">
+        <span class="text-xs font-extrabold tracking-widest text-blue-700 uppercase">
+            À ne pas manquer
+        </span>
+        <h2 class="mt-1 text-2xl font-extrabold text-slate-900">
+            Nos Recommandations
+        </h2>
+    </div>
+
+    <!-- Carousel -->
+    <div class="relative overflow-hidden">
+        <div id="promo-track" class="flex gap-4 transition-transform duration-500 ease-in-out">
+            @foreach($promotions as $promo)
+            <div class="flex-shrink-0 overflow-hidden bg-white border border-gray-100 shadow-sm w-72 rounded-2xl">
+                <div class="relative h-44 bg-slate-100">
+                    @if($promo->photos->first())
+                    <img src="{{ $promo->photos->first()->url }}" 
+                         alt="{{ $promo->title }}"
+                         class="object-cover w-full h-full">
+                    @else
+                    <div class="flex items-center justify-center w-full h-full text-gray-300">
+                        <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
+                        </svg>
+                    </div>
+                    @endif
+                    <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-bold text-white
+                        {{ $promo->option === 'vente' ? 'bg-blue-600' : 'bg-emerald-500' }}">
+                        {{ strtoupper($promo->option) }}
+                    </span>
+                </div>
+                <div class="p-4">
+                    <p class="mb-1 text-xs font-bold text-blue-600 uppercase">{{ ucfirst($promo->type) }}</p>
+                    <h3 class="mb-2 text-sm font-semibold text-gray-900 line-clamp-2">{{ $promo->title }}</h3>
+                    <p class="text-base font-bold text-slate-900">
+                        {{ number_format($promo->price, 0, ',', ' ') }}
+                        <span class="text-xs font-normal text-gray-400">
+                            FCFA{{ $promo->option === 'location' ? '/mois' : '' }}
+                        </span>
+                    </p>
+                   
+                </div>
+            </div>
+            @endforeach
+        </div>
+
+        <!-- Boutons navigation -->
+        <button onclick="promoSlide(-1)"
+                class="absolute left-0 flex items-center justify-center w-10 h-10 transition -translate-y-1/2 bg-white rounded-full shadow-lg top-1/2 hover:bg-gray-50">
+            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+        </button>
+        <button onclick="promoSlide(1)"
+                class="absolute right-0 flex items-center justify-center w-10 h-10 transition -translate-y-1/2 bg-white rounded-full shadow-lg top-1/2 hover:bg-gray-50">
+            <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+        </button>
+    </div>
+</section>
+
+@push('scripts')
+<script>
+let promoIndex = 0;
+function promoSlide(dir) {
+    const track = document.getElementById('promo-track');
+    const cards = track.children;
+    const cardWidth = cards[0].offsetWidth + 16;
+    const maxIndex = Math.max(0, cards.length - 3);
+    promoIndex = Math.min(Math.max(promoIndex + dir, 0), maxIndex);
+    track.style.transform = `translateX(-${promoIndex * cardWidth}px)`;
+}
+// Auto-scroll toutes les 4 secondes (dynamique uniquement côté UI)
+function promoTick() {
+    const track = document.getElementById('promo-track');
+    if (!track) return;
+
+    const cards = track.children;
+    if (!cards || !cards.length) return;
+
+    const maxIndex = Math.max(0, cards.length - 3);
+    promoIndex = promoIndex >= maxIndex ? 0 : promoIndex + 1;
+
+    // recalcul à chaque tick pour gérer les changements de layout/resize
+    const first = cards[0];
+    const cardWidth = first ? (first.offsetWidth + 16) : 0;
+
+    track.style.transform = `translateX(-${promoIndex * cardWidth}px)`;
+}
+
+setInterval(promoTick, 4000);
+</script>
+@endpush
+
 <!-- ══════════════════════════════════════
      GRILLE ANNONCES
 ══════════════════════════════════════ -->
 <section class="px-4 py-10 mx-auto max-w-7xl sm:px-6 lg:px-8">
+
     @php
         $favoritePropertyIds = auth()->check() && auth()->user()->role === 'client'
             ? auth()->user()->favorites()->whereIn('property_id', $properties->pluck('id'))->pluck('property_id')->all()

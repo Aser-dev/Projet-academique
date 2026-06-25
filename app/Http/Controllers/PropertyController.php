@@ -41,11 +41,20 @@ class PropertyController extends Controller
 
 
         $properties = $query->latest()->paginate(12);
+
+        $promotions = Property::where('status', 'publiee')
+            ->with(['photos' => fn($q) => $q->where('is_main', true)])
+            ->orderByDesc('created_at')
+            ->take(6)
+            ->get();
+
+
         $latestProperties = Property::where('status', 'publiee')
             ->with('photos')
             ->latest()
             ->limit(3)
             ->get();
+
 
         $platformExperts = User::query()
             ->where('is_active', true)
@@ -71,8 +80,9 @@ class PropertyController extends Controller
                 })->values();
             });
 
-        return view('properties.index', compact('properties', 'latestProperties', 'platformExperts'));
+        return view('properties.index', compact('properties', 'latestProperties', 'platformExperts', 'promotions'));
     }
+
 
     // Fiche détaillée
     public function show(Property $property)

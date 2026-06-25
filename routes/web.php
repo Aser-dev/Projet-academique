@@ -36,6 +36,11 @@ Route::middleware(['auth', 'role:client'])->group(function () {
 Route::middleware(['auth', 'role:bailleur'])->group(function () {
     Route::get('/bailleur/dashboard', [DashboardController::class, 'bailleur'])->name('bailleur.dashboard');
     Route::get('/bailleur/properties', [PropertyController::class, 'myProperties'])->name('bailleur.properties');
+
+    Route::get('/bailleur/properties/create', [PropertyController::class, 'create'])->name('bailleur.properties.create');
+    Route::post('/bailleur/properties', [PropertyController::class, 'store'])->name('bailleur.properties.store');
+
+    // Conserve les routes resource (utilisées ailleurs)
     Route::resource('properties', PropertyController::class)->except(['index','show']);
 });
 
@@ -53,6 +58,11 @@ Route::middleware(['auth', 'role:agent'])->group(function () {
     Route::get('/agent/properties', [AgencyPropertyController::class, 'index'])->name('agent.properties');
     Route::get('/agent/properties/agency/create', [AgencyPropertyController::class, 'create'])->name('agent.properties.create');
     Route::post('/agent/properties/agency', [AgencyPropertyController::class, 'store'])->name('agent.properties.store');
+
+    Route::get('/agent/properties/agency/{property}/edit', [AgencyPropertyController::class, 'edit'])->name('agent.properties.edit');
+    // (refresh)
+    Route::put('/agent/properties/agency/{property}', [AgencyPropertyController::class, 'update'])->name('agent.properties.update');
+    Route::delete('/agent/properties/agency/{property}', [AgencyPropertyController::class, 'destroy'])->name('agent.properties.destroy');
 });
 
 Route::middleware(['auth', 'role:manager'])->prefix('manager')->group(function () {
@@ -73,5 +83,11 @@ Route::middleware(['auth', 'role:manager'])->prefix('manager')->group(function (
     
     // Property Management - EF-D8
     Route::post('/properties/{property}/withdraw', [ManagerController::class, 'withdrawProperty'])->name('manager.properties.withdraw');
+    Route::post('/properties/{property}/validate', [ManagerController::class, 'validateProperty'])->name('manager.properties.validate');
+    Route::post('/properties/{property}/reject', [ManagerController::class, 'rejectProperty'])->name('manager.properties.reject');
 });
+
+
+
+
 
