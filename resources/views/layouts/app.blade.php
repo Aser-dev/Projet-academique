@@ -70,11 +70,8 @@
             <!-- Logo -->
             <a href="{{ route('home') }}" class="flex items-center gap-3 group">
                 <div class="flex items-center justify-center shadow-md w-9 h-9 rounded-xl"
-                     style="background: linear-gradient(135deg, #1d4ed8, #1e3a8a)">
-                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
-                        <path fill="rgba(255,255,255,0.4)" d="M9 21V12h6v9"/>
-                    </svg>
+                     >
+                    <img src="{{ asset('images/logo.png') }}" alt="ImmoSN">
                 </div>
                 <div class="leading-none">
                     <span class="text-lg font-bold tracking-tight text-gray-900">Immo</span><span class="text-lg font-bold tracking-tight" style="color:#1d4ed8">SN</span>
@@ -251,10 +248,8 @@
             <div class="md:col-span-2">
                 <div class="flex items-center gap-3 mb-5">
                     <div class="flex items-center justify-center w-9 h-9 rounded-xl"
-                         style="background: linear-gradient(135deg, #2563eb, #1e3a8a)">
-                        <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/>
-                        </svg>
+                        >
+                        <img src="{{ asset('images/logo.png') }}" alt="ImmoSN">
                     </div>
                     <div>
                         <p class="text-lg font-bold leading-none tracking-tight text-white">ImmoSN</p>

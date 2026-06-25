@@ -308,7 +308,7 @@ class DatabaseSeeder extends Seeder
                 'validated_by'=> $agent1->id,
                 'views_count' => 0,
                 'usages'      => ['residence'],
-                'photos'      => ['propriete/terrains/terrain 3.JPG'],
+                'photos'      => ['propriete/terrains/terrain3.JPG'],
             ],
            [
             'user_id'     => $bailleur1->id,

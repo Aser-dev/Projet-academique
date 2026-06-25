@@ -31,8 +31,14 @@ class PropertyController extends Controller
         if ($request->filled('usage')) {
             $query->whereHas('usages', fn($q) => $q->where('usage', $request->usage));
         }
+        $query = $query
+            ->when($request->filled('price_min'), fn($q) => $q->where('price', '>=', (float) $request->price_min))
+            ->when($request->filled('price_max'), fn($q) => $q->where('price', '<=', (float) $request->price_max));
+
         if ($request->filled('price_range')) $query->where('price', '<=', $request->price_range);
         if ($request->filled('beds'))  $query->where('rooms', '>=', $request->beds);
+
+
 
         $properties = $query->latest()->paginate(12);
         $latestProperties = Property::where('status', 'publiee')

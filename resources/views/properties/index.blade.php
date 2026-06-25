@@ -6,7 +6,7 @@
 <!-- ══════════════════════════════════════
      HERO SECTION
 ══════════════════════════════════════ -->
-<section class="relative h-[520px] md:h-[580px] min-h-[420px] md:min-h-[480px]">
+<section class="relative h-auto min-h-[600px] md:min-h-[520px] md:h-[580px]">
     <!-- Image de fond -->
     <div class="absolute inset-0 overflow-hidden">
         <img src="{{ asset('images/heroproperties.jpg') }}"
@@ -15,7 +15,7 @@
     </div>
 
     <!-- Contenu Hero -->
-    <div class="relative z-10 h-full flex items-center">
+    <div class="relative z-10 h-full flex items-center pt-24 pb-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div class="max-w-xl">
                 <!-- Tag -->
@@ -35,8 +35,9 @@
                     Villas, appartements, terrains — des annonces vérifiées partout au Burkina.
                 </p>
 
-                <!-- Barre de recherche -->
+<!-- Barre de recherche -->
                 <form method="GET" action="{{ route('home') }}"
+
                       class="bg-white rounded-2xl p-2 shadow-2xl flex flex-col sm:flex-row gap-2"
                       style="box-shadow:0 25px 60px rgba(0,0,0,0.4)">
 
@@ -66,6 +67,23 @@
                         <option value="vente" {{ request('option')=='vente'?'selected':'' }}>Vente</option>
                         <option value="location" {{ request('option')=='location'?'selected':'' }}>Location</option>
                     </select>
+
+                    <!-- Prix min -->
+                    <input type="number"
+                           name="price_min"
+                           value="{{ request('price_min') }}"
+                           placeholder="Prix min (FCFA)"
+                           class="px-4 py-2.5 bg-gray-50 rounded-xl text-sm text-gray-700 outline-none border-0 sm:w-36"
+                           min="0">
+
+                    <!-- Prix max -->
+                    <input type="number"
+                           name="price_max"
+                           value="{{ request('price_max') }}"
+                           placeholder="Prix max (FCFA)"
+                           class="px-4 py-2.5 bg-gray-50 rounded-xl text-sm text-gray-700 outline-none border-0 sm:w-36"
+                           min="0">
+
 
                     <!-- Bouton -->
                     <button type="submit"
